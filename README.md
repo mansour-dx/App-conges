@@ -39,7 +39,7 @@ Une application web moderne pour la gestion des congés des employés, développ
 1. Clonez le dépôt :
 
 ```bash
-git clone https://github.com/VOTRE_NOM_UTILISATEUR/App-Conges.git
+git clone https://github.com/mansour-dx/App-Conges.git
 cd App-Conges
 ```
 
@@ -107,7 +107,7 @@ Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
 
 ## 👥 Auteurs
 
-- Votre nom - Développeur principal
+- mansour-dx
 
 ## 📞 Support
 
