@@ -13,6 +13,7 @@
     "pinia": "^2.1.7",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0",
+    "vue-signature-pad": "^3.0.2",
     "vuetify": "^3.8.0-beta.0"
   },
   "devDependencies": {

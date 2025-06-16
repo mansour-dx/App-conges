@@ -1,487 +1,699 @@
 <template>
-  <div class="modal-overlay" @click.self="$emit('close')">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h2>Demande d'Autorisation d'Absence - SENELEC</h2>
-        <button class="close-button" @click="$emit('close')">
-          <i class="fas fa-times"></i>
-        </button>
+  <div class="fiche-absence" id="fiche-absence">
+    <div class="logo-centre">
+      <img
+        src="@/assets/images/logo-senelec.png"
+        alt="Senelec"
+        class="logo-fiche"
+      />
+    </div>
+    <div class="entete-fiche">
+      <div class="entete-texte">
+        <div class="titre-processus">Processus Ressources Humaines</div>
+        <div class="sous-titre">Demande d'autorisation d'absence</div>
+      </div>
+      <div class="entete-infos">
+        <div class="date-creation-container">
+          <span>Date création :</span>
+          <input
+            type="date"
+            v-model="formData.dateCreation"
+            class="date-input-hidden-print"
+          />
+          <span class="date-display-only-print">{{
+            formatDate(formData.dateCreation)
+          }}</span>
+        </div>
+        <div>Réf : PS1-FOR-018-b</div>
+        <div>Page 1 / 1</div>
+      </div>
+    </div>
+    <div class="bandeau-titre">
+      <span>DEMANDE D'AUTORISATION D'ABSENCE</span>
+    </div>
+    <form class="form-fiche" @submit.prevent>
+      <div class="ligne-champs">
+        <div class="champ">
+          <label>Prénoms :</label>
+          <input type="text" v-model="formData.prenom" required />
+        </div>
+        <div class="champ">
+          <label>Nom :</label>
+          <input type="text" v-model="formData.nom" required />
+        </div>
+      </div>
+      <div class="ligne-champs">
+        <div class="champ">
+          <label>Matricule :</label>
+          <input type="text" v-model="formData.matricule" required />
+        </div>
+        <div class="champ">
+          <label>Unité d'Appartenance :</label>
+          <input type="text" v-model="formData.unite" required />
+        </div>
+      </div>
+      <div class="ligne-champs">
+        <div class="champ">
+          <label>Poste :</label>
+          <input type="text" v-model="formData.poste" />
+        </div>
+        <div class="champ">
+          <label>Adresse :</label>
+          <input type="text" v-model="formData.adresse" />
+        </div>
+      </div>
+      <div class="ligne-champs">
+        <div class="champ">
+          <label>Téléphone :</label>
+          <input type="text" v-model="formData.telephone" />
+        </div>
       </div>
 
-      <form @submit.prevent="soumettreDemandeAbsence" class="absence-form">
-        <div class="form-section">
-          <h3>Informations Personnelles</h3>
-          <div class="form-group">
-            <label for="prenom">Prénom</label>
-            <input type="text" id="prenom" v-model="formData.prenom" required />
+      <div class="section-absence">
+        <div class="section-titre">Sollicite une autorisation d'absence :</div>
+        <div class="ligne-champs">
+          <div class="champ">
+            <label>Le matin du :</label>
+            <input type="date" v-model="formData.matin" />
           </div>
-
-          <div class="form-group">
-            <label for="nom">Nom</label>
-            <input type="text" id="nom" v-model="formData.nom" required />
-          </div>
-
-          <div class="form-group">
-            <label for="matricule">Matricule</label>
-            <input
-              type="text"
-              id="matricule"
-              v-model="formData.matricule"
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="poste">Poste</label>
-            <input type="text" id="poste" v-model="formData.poste" required />
-          </div>
-
-          <div class="form-group">
-            <label for="unite">Unité d'Appartenance</label>
-            <input type="text" id="unite" v-model="formData.unite" required />
-          </div>
-
-          <div class="form-group">
-            <label for="telephone">Téléphone</label>
-            <input
-              type="tel"
-              id="telephone"
-              v-model="formData.telephone"
-              required
-            />
+          <div class="champ">
+            <label>L'après-midi du :</label>
+            <input type="date" v-model="formData.apresMidi" />
           </div>
         </div>
-
-        <div class="form-section">
-          <h3>Période d'Absence</h3>
-
-          <div class="form-group">
-            <label>Type de période</label>
-            <div class="radio-group">
-              <label class="radio-label">
-                <input
-                  type="radio"
-                  v-model="formData.typePeriode"
-                  value="matin"
-                />
-                Matin
-              </label>
-              <label class="radio-label">
-                <input
-                  type="radio"
-                  v-model="formData.typePeriode"
-                  value="apresmidi"
-                />
-                Après-midi
-              </label>
-              <label class="radio-label">
-                <input
-                  type="radio"
-                  v-model="formData.typePeriode"
-                  value="journee"
-                />
-                Journée complète
-              </label>
-              <label class="radio-label">
-                <input
-                  type="radio"
-                  v-model="formData.typePeriode"
-                  value="periode"
-                />
-                Période
-              </label>
-            </div>
-          </div>
-
-          <div
-            class="form-group"
-            v-if="
-              ['matin', 'apresmidi', 'journee'].includes(formData.typePeriode)
-            "
-          >
-            <label for="dateUnique">Date</label>
-            <input
-              type="date"
-              id="dateUnique"
-              v-model="formData.dateUnique"
-              :min="minDateDebut"
-              required
-            />
-          </div>
-
-          <div v-if="formData.typePeriode === 'periode'">
-            <div class="form-group">
-              <label for="dateDebut">Du</label>
-              <input
-                type="date"
-                id="dateDebut"
-                v-model="formData.dateDebut"
-                :min="minDateDebut"
-                required
-              />
-            </div>
-
-            <div class="form-group">
-              <label for="dateFin">Au</label>
-              <input
-                type="date"
-                id="dateFin"
-                v-model="formData.dateFin"
-                :min="formData.dateDebut"
-                required
-              />
-            </div>
-          </div>
-
-          <div class="form-info" v-if="dureeAbsence">
-            <span
-              >Nombre de jours déductibles : {{ dureeAbsence }} jour(s)</span
-            >
+        <div class="ligne-champs">
+          <div class="champ">
+            <label>La journée du :</label>
+            <input type="date" v-model="formData.journee" />
           </div>
         </div>
+        <div class="ligne-champs">
+          <div class="champ">
+            <label>Les journées du :</label>
+            <input type="date" v-model="formData.periodeDebut" />
+          </div>
+          <div class="champ">
+            <label>Jusqu'au :</label>
+            <input type="date" v-model="formData.periodeFin" />
+          </div>
+          <div class="champ">
+            <span>(inclus)</span>
+          </div>
+        </div>
+      </div>
 
-        <div class="form-section">
-          <h3>Justification</h3>
-          <div class="form-group">
-            <label for="motif">Motif détaillé</label>
+      <div class="section-absence">
+        <div class="ligne-champs">
+          <div class="champ">
+            <label>Nombre de jours déductibles :</label>
+            <input
+              type="number"
+              min="0"
+              v-model="formData.nbJours"
+              style="width: 60px"
+            />
+            <span>jours</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-absence">
+        <div class="section-titre">Motifs à préciser obligatoirement :</div>
+        <div class="ligne-champs">
+          <div class="champ" style="width: 100%">
             <textarea
-              id="motif"
               v-model="formData.motif"
               rows="4"
-              required
+              style="width: 100%"
             ></textarea>
           </div>
+        </div>
+      </div>
 
-          <div class="form-group">
-            <label for="pieceJointe">Pièce justificative</label>
+      <div class="section-signature">
+        <div class="ligne-signature">
+          <div class="date-container">
+            <span>Dakar le</span>
             <input
-              type="file"
-              id="pieceJointe"
-              @change="handleFileUpload"
-              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+              type="date"
+              v-model="formData.dateDemande"
+              style="width: 150px"
             />
-            <small>Formats acceptés : PDF, DOC, DOCX, JPG, PNG (max 5MB)</small>
+          </div>
+          <div class="signature-area">
+            <span class="signature-label">Signature de l'intéressé(e)</span>
+            <div class="signature-pad" @click="ouvrirPadSignature('employe')">
+              <div v-if="formData.signatureEmploye" class="signature-image">
+                <img :src="formData.signatureEmploye" alt="Signature" />
+              </div>
+              <div v-else class="signature-placeholder">
+                <i class="fas fa-upload"></i>
+                <span>Upload Signature</span>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
 
-        <div class="form-actions">
-          <button type="button" class="btn-secondary" @click="$emit('close')">
-            Annuler
-          </button>
-          <button type="submit" class="btn-primary">
-            Soumettre la demande
-          </button>
+      <table class="approbation-table-absence">
+        <thead>
+          <tr>
+            <th>Avis du Supérieur Hiérarchique</th>
+            <th>Avis du Directeur d'Unité</th>
+            <th>Avis du Correspondant RH<sup>1</sup></th>
+            <th>
+              Avis Département Administration du Personnel et Rémunération
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div
+                class="signature-pad"
+                @click="ouvrirPadSignature('superieur')"
+              >
+                <div v-if="formData.signatureSuperieur" class="signature-image">
+                  <img :src="formData.signatureSuperieur" alt="Signature" />
+                </div>
+                <div v-else class="signature-placeholder">
+                  <i class="fas fa-upload"></i>
+                  <span>Upload Signature</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div
+                class="signature-pad"
+                @click="ouvrirPadSignature('directeur')"
+              >
+                <div v-if="formData.signatureDirecteur" class="signature-image">
+                  <img :src="formData.signatureDirecteur" alt="Signature" />
+                </div>
+                <div v-else class="signature-placeholder">
+                  <i class="fas fa-upload"></i>
+                  <span>Upload Signature</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div
+                class="signature-pad"
+                @click="ouvrirPadSignature('correspondantRH')"
+              >
+                <div
+                  v-if="formData.signatureCorrespondantRH"
+                  class="signature-image"
+                >
+                  <img
+                    :src="formData.signatureCorrespondantRH"
+                    alt="Signature"
+                  />
+                </div>
+                <div v-else class="signature-placeholder">
+                  <i class="fas fa-upload"></i>
+                  <span>Upload Signature</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div
+                class="signature-pad"
+                @click="ouvrirPadSignature('validationDeptAdmin')"
+              >
+                <div
+                  v-if="formData.signatureValidationDeptAdmin"
+                  class="signature-image"
+                >
+                  <img
+                    :src="formData.signatureValidationDeptAdmin"
+                    alt="Signature"
+                  />
+                </div>
+                <div v-else class="signature-placeholder">
+                  <i class="fas fa-upload"></i>
+                  <span>Upload Signature</span>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="drh-decision-absence">
+        Décision du Directeur des Ressources Humaines
+        <div class="signature-pad" @click="ouvrirPadSignature('directeurRH')">
+          <div v-if="formData.signatureDirecteurRH" class="signature-image">
+            <img :src="formData.signatureDirecteurRH" alt="Signature" />
+          </div>
+          <div v-else class="signature-placeholder">
+            <i class="fas fa-upload"></i>
+            <span>Upload Signature</span>
+          </div>
         </div>
-      </form>
-    </div>
+        <div class="signature-line"></div>
+      </div>
+
+      <div class="note-bas">
+        <sup>1</sup> Dans les Unités opérationnelles et Délégations Régionales
+      </div>
+      <div class="actions-print">
+        <button type="button" @click="imprimerFiche" :disabled="!peutImprimer">
+          Imprimer
+        </button>
+        <button
+          type="button"
+          class="btn-envoyer"
+          @click="envoyerDemande"
+          :disabled="demandeEnvoyee"
+        >
+          Envoyer la demande
+        </button>
+      </div>
+      <div v-if="confirmation" class="confirmation-message">
+        Demande envoyée avec succès !
+      </div>
+    </form>
+    <SignaturePad
+      v-if="showSignaturePad"
+      @close="showSignaturePad = false"
+      @signature-saved="sauvegarderSignature"
+    />
   </div>
 </template>
 
 <script>
+import SignaturePad from "./SignaturePad.vue";
+
 export default {
   name: "DemandeAbsence",
+  components: {
+    SignaturePad,
+  },
   data() {
     return {
+      showSignaturePad: false,
+      currentSignatureType: null,
       formData: {
         prenom: "",
         nom: "",
         matricule: "",
-        poste: "",
         unite: "",
+        poste: "",
+        adresse: "",
         telephone: "",
-        typePeriode: "",
-        dateUnique: "",
-        dateDebut: "",
-        dateFin: "",
+        matin: "",
+        apresMidi: "",
+        journee: "",
+        periodeDebut: "",
+        periodeFin: "",
+        nbJours: "",
         motif: "",
-        pieceJointe: null,
+        dateDemande: new Date().toISOString().split("T")[0],
+        dateCreation: new Date().toISOString().split("T")[0],
+        signatureEmploye: null,
+        signatureSuperieur: null,
+        signatureDirecteur: null,
+        signatureCorrespondantRH: null,
+        signatureValidationDeptAdmin: null,
+        signatureDirecteurRH: null,
+        status: "en_attente",
+        etapeActuelle: "Approbation Supérieur Hiérarchique",
       },
+      demandeEnvoyee: false,
+      confirmation: false,
     };
   },
   computed: {
-    minDateDebut() {
-      const today = new Date();
-      return today.toISOString().split("T")[0];
-    },
-    dureeAbsence() {
-      if (this.formData.typePeriode === "periode") {
-        if (!this.formData.dateDebut || !this.formData.dateFin) return null;
-
-        const debut = new Date(this.formData.dateDebut);
-        const fin = new Date(this.formData.dateFin);
-        const diffTime = Math.abs(fin - debut);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-
-        return diffDays;
-      } else if (["matin", "apresmidi"].includes(this.formData.typePeriode)) {
-        return 0.5;
-      } else if (this.formData.typePeriode === "journee") {
-        return 1;
-      }
-      return null;
-    },
-    pieceJustificativeRequise() {
-      return ["maladie", "evenement_familial"].includes(
-        this.formData.typeAbsence
+    peutImprimer() {
+      return (
+        this.formData.signatureEmploye &&
+        this.formData.signatureSuperieur &&
+        this.formData.signatureDirecteur &&
+        this.formData.signatureCorrespondantRH &&
+        this.formData.signatureValidationDeptAdmin &&
+        this.formData.signatureDirecteurRH
       );
     },
   },
+  mounted() {
+    const user = localStorage.getItem("user");
+    if (user) {
+      try {
+        const userData = JSON.parse(user);
+        this.formData.nom = userData.nom || "";
+        this.formData.prenom = userData.prenom || "";
+      } catch (e) {}
+    }
+  },
   methods: {
-    handleFileUpload(event) {
-      const file = event.target.files[0];
-      if (file) {
-        if (file.size > 5 * 1024 * 1024) {
-          alert("Le fichier est trop volumineux. Taille maximum : 5MB");
-          event.target.value = "";
-          return;
-        }
-        this.formData.pieceJointe = file;
-      }
+    formatDate(dateString) {
+      if (!dateString) return "";
+      const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+      return new Date(dateString).toLocaleDateString("fr-FR", options);
     },
-    soumettreDemandeAbsence() {
-      // Vérification des dates
-      if (this.formData.typePeriode === "periode") {
-        if (
-          new Date(this.formData.dateFin) < new Date(this.formData.dateDebut)
-        ) {
-          alert("La date de fin doit être postérieure à la date de début");
-          return;
-        }
-      }
-
-      // Création d'un objet FormData pour l'envoi du fichier
-      const formData = new FormData();
-      for (const [key, value] of Object.entries(this.formData)) {
-        formData.append(key, value);
-      }
-
-      // TODO: Envoyer les données à l'API
-      console.log("Données du formulaire:", this.formData);
-
-      // Réinitialiser le formulaire et fermer la modal
-      this.$emit("close");
+    imprimerFiche() {
+      window.print();
+    },
+    envoyerDemande() {
+      this.demandeEnvoyee = true;
+      this.confirmation = true;
+      setTimeout(() => {
+        this.confirmation = false;
+      }, 3000);
+    },
+    ouvrirPadSignature(type) {
+      this.currentSignatureType = type;
+      this.showSignaturePad = true;
+    },
+    sauvegarderSignature(signatureData) {
+      const type = this.currentSignatureType;
+      this.formData[
+        `signature${type.charAt(0).toUpperCase() + type.slice(1)}`
+      ] = signatureData;
     },
   },
 };
 </script>
 
 <style scoped>
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+* {
+  box-sizing: border-box;
 }
 
-.modal-content {
+.fiche-absence {
   background: white;
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 32px 40px;
   border-radius: 16px;
-  width: 90%;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 2rem;
-  position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  font-family: "Segoe UI", Arial, sans-serif;
+  color: #222;
 }
 
-.modal-header {
+.logo-centre {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.logo-fiche {
+  width: 90px;
+  height: auto;
+}
+
+.entete-fiche {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2rem;
+  align-items: flex-start;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
 }
 
-.modal-header h2 {
-  color: #2c3e50;
-  margin: 0;
-  font-size: 1.5rem;
+.entete-texte {
+  flex: 1;
+  text-align: center;
+}
+
+.titre-processus {
+  font-size: 16px;
   font-weight: 600;
 }
 
-.close-button {
-  background: none;
-  border: none;
-  color: #64748b;
-  cursor: pointer;
-  padding: 0.5rem;
-  font-size: 1.25rem;
-  transition: color 0.3s ease;
+.sous-titre {
+  font-size: 15px;
+  color: #555;
 }
 
-.close-button:hover {
-  color: #2c3e50;
+.entete-infos {
+  text-align: right;
+  font-size: 13px;
+  color: #666;
 }
 
-.absence-form {
+.bandeau-titre {
+  background: #f3f3f3;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  margin: 24px 0 18px 0;
+  letter-spacing: 1px;
+  padding: 10px 0;
+  border-radius: 6px;
+}
+
+.form-fiche {
+  margin-top: 10px;
+}
+
+.ligne-champs {
   display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  gap: 30px;
+  margin-bottom: 12px;
 }
 
-.form-section {
-  background: #f8fafc;
-  padding: 1.5rem;
-  border-radius: 12px;
-}
-
-.form-section h3 {
-  color: #2c3e50;
-  margin: 0 0 1.5rem 0;
-  font-size: 1.1rem;
-  font-weight: 500;
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group:last-child {
-  margin-bottom: 0;
-}
-
-.radio-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 0.5rem;
-}
-
-.radio-label {
+.champ {
+  flex: 1;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 6px;
-  background: white;
-  border: 2px solid #e2e8f0;
-  transition: all 0.3s ease;
+  gap: 8px;
 }
 
-.radio-label:hover {
-  border-color: #008a9b;
-}
-
-.radio-label input[type="radio"] {
-  margin: 0;
-}
-
-.form-info {
-  margin-top: 1rem;
-  padding: 0.75rem;
-  background: #e8f5ff;
-  border-radius: 8px;
-  color: #0369a1;
-  font-size: 0.9rem;
-}
-
-label {
-  display: block;
-  color: #2c3e50;
-  margin-bottom: 0.5rem;
+.champ label {
+  min-width: 110px;
+  font-size: 14px;
   font-weight: 500;
 }
 
-input[type="text"],
-input[type="tel"],
-input[type="email"],
-input[type="date"],
-select,
-textarea {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
+.section-absence {
+  margin: 18px 0 10px 0;
 }
 
-input[type="file"] {
-  width: 100%;
-  padding: 0.75rem;
-  border: 2px dashed #e2e8f0;
-  border-radius: 8px;
-  cursor: pointer;
+.section-titre {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 7px;
 }
 
-small {
-  display: block;
-  color: #64748b;
-  margin-top: 0.5rem;
-  font-size: 0.8rem;
+.section-signature {
+  margin: 18px 0 10px 0;
 }
 
-input:focus,
-select:focus,
-textarea:focus {
-  outline: none;
-  border-color: #008a9b;
-  box-shadow: 0 0 0 3px rgba(0, 138, 155, 0.1);
-}
-
-.form-actions {
+.ligne-signature {
   display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 1rem;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  margin-top: 10px;
 }
 
-.btn-primary,
-.btn-secondary {
-  padding: 0.75rem 1.5rem;
+.signature-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 200px;
+  position: relative;
+  padding-bottom: 20px;
+}
+
+.signature-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform: translateX(0%);
+  width: 40%;
+  height: 1px;
+  background-color: #333;
+}
+
+.signature-pad {
+  width: 250px;
+  height: 120px;
+  border: 2px dashed #ccc;
   border-radius: 8px;
-  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition: all 0.3s ease;
+  background: #f8f9fa;
+  overflow: hidden;
 }
 
-.btn-primary {
-  background: linear-gradient(90deg, #008a9b, #00b4d8);
+.signature-pad:hover {
+  border-color: #008a9b;
+  background: #f0f9fa;
+}
+
+.signature-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  text-align: center;
+  padding: 1rem;
+}
+
+.signature-placeholder i {
+  font-size: 24px;
+  color: #008a9b;
+}
+
+.signature-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+}
+
+.signature-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.signature-label {
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.note-bas {
+  font-size: 12px;
+  color: #888;
+  margin-top: 10px;
+  text-align: left;
+}
+
+.actions-print {
+  text-align: right;
+  margin-top: 18px;
+}
+
+.actions-print button {
+  background: #008a9b;
   color: white;
   border: none;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-left: 10px;
 }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 138, 155, 0.3);
+.actions-print button:disabled {
+  background: #bdbdbd;
+  cursor: not-allowed;
 }
 
-.btn-secondary {
-  background: #f1f5f9;
-  color: #2c3e50;
-  border: none;
+.btn-envoyer {
+  background: #00b894;
 }
 
-.btn-secondary:hover {
-  background: #e2e8f0;
+.confirmation-message {
+  margin-top: 18px;
+  color: #00b894;
+  font-weight: 600;
+  text-align: right;
 }
 
-@media (max-width: 768px) {
-  .modal-content {
-    padding: 1.5rem;
+@media print {
+  .actions-print,
+  .actions-print button {
+    display: none !important;
   }
+  .fiche-absence {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 0 0 0 0 !important;
+    width: 100% !important;
+    color: #000 !important;
+  }
+}
 
-  .form-actions {
-    flex-direction: column-reverse;
-  }
+.date-creation-container {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
 
-  .btn-primary,
-  .btn-secondary {
-    width: 100%;
-  }
+.date-input-hidden-print {
+  display: inline-block;
+}
 
-  .radio-group {
-    flex-direction: column;
-  }
+.date-display-only-print {
+  display: none;
+}
 
-  .radio-label {
-    width: 100%;
+@media print {
+  .date-input-hidden-print {
+    display: none;
   }
+  .date-display-only-print {
+    display: inline-block;
+  }
+}
+
+.approbation-table-absence {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.approbation-table-absence th,
+.approbation-table-absence td {
+  border: 1px solid #bbb;
+  padding: 8px;
+  vertical-align: top;
+  text-align: center;
+}
+
+.approbation-table-absence th {
+  background-color: #f3f3f3;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.drh-decision-absence {
+  margin-top: 20px;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  padding-bottom: 20px;
+  position: relative;
+}
+
+.drh-decision-absence .signature-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transform: translateX(0%);
+  width: 40%;
+  height: 1px;
+  background-color: #333;
+}
+
+.approbation-table-absence .signature-pad {
+  width: 100%;
+  height: 100px;
+  border: 1px dashed #ccc;
+  border-radius: 4px;
+  margin: 5px auto;
+}
+
+.note-bas {
+  font-size: 12px;
+  color: #888;
+  margin-top: 10px;
+  text-align: left;
 }
 </style>
