@@ -11,10 +11,12 @@
             @change="filtreAnnee = $event.target.value"
             class="filter-select"
           >
+            <option value="all">Toutes les années</option>
+            <option value="2025">2025</option>
+            <option value="2024">2024</option>
             <option value="2023">2023</option>
             <option value="2022">2022</option>
             <option value="2021">2021</option>
-            <option value="all">Toutes les années</option>
           </select>
         </div>
         <div class="filter-item">
@@ -27,8 +29,8 @@
           >
             <option value="all">Tous types</option>
             <option value="annuel">Congé annuel</option>
-            <option value="maladie">Congé maladie</option>
-            <option value="exceptionnel">Congé exceptionnel</option>
+            <option value="fractionnes">Congés fractionnés</option>
+            <option value="autres_legaux">Autres congés légaux</option>
           </select>
         </div>
       </div>
@@ -140,80 +142,110 @@ export default {
   name: "HistoriqueConges",
   data() {
     return {
-      filtreAnnee: "2023",
+      filtreAnnee: "all",
       filtreType: "all",
       currentPage: 1,
       itemsPerPage: 5,
       conges: [
         {
-          dateDebut: "15/06/2023",
-          dateFin: "30/06/2023",
+          dateDebut: "15/06/2025",
+          dateFin: "30/06/2025",
           type: "Congé annuel",
           typeClass: "annuel",
           duree: 16,
           statut: "Approuvé",
           statutClass: "approuve",
-          dateDemande: "01/05/2023",
+          dateDemande: "01/05/2025",
         },
         {
-          dateDebut: "10/03/2023",
-          dateFin: "15/03/2023",
-          type: "Congé maladie",
-          typeClass: "maladie",
+          dateDebut: "10/03/2025",
+          dateFin: "15/03/2025",
+          type: "Congés fractionnés",
+          typeClass: "fractionnes",
           duree: 6,
           statut: "Approuvé",
           statutClass: "approuve",
-          dateDemande: "09/03/2023",
+          dateDemande: "09/03/2025",
         },
         {
-          dateDebut: "05/01/2023",
-          dateFin: "07/01/2023",
-          type: "Récupération",
-          typeClass: "recuperation",
+          dateDebut: "05/01/2024",
+          dateFin: "07/01/2024",
+          type: "Autres congés légaux",
+          typeClass: "autres_legaux",
           duree: 3,
           statut: "Approuvé",
           statutClass: "approuve",
-          dateDemande: "20/12/2022",
+          dateDemande: "20/12/2023",
         },
         {
-          dateDebut: "23/11/2022",
-          dateFin: "25/11/2022",
-          type: "Congé exceptionnel",
-          typeClass: "exceptionnel",
+          dateDebut: "23/11/2024",
+          dateFin: "25/11/2024",
+          type: "Congés fractionnés",
+          typeClass: "fractionnes",
           duree: 3,
           statut: "Approuvé",
           statutClass: "approuve",
-          dateDemande: "15/11/2022",
+          dateDemande: "15/11/2024",
         },
         {
-          dateDebut: "01/08/2022",
-          dateFin: "15/08/2022",
+          dateDebut: "01/08/2023",
+          dateFin: "15/08/2023",
           type: "Congé annuel",
           typeClass: "annuel",
           duree: 15,
           statut: "Approuvé",
           statutClass: "approuve",
-          dateDemande: "01/07/2022",
+          dateDemande: "01/07/2023",
         },
         {
-          dateDebut: "10/05/2022",
-          dateFin: "12/05/2022",
-          type: "Congé maladie",
-          typeClass: "maladie",
+          dateDebut: "10/05/2023",
+          dateFin: "12/05/2023",
+          type: "Autres congés légaux",
+          typeClass: "autres_legaux",
           duree: 3,
           statut: "Approuvé",
           statutClass: "approuve",
-          dateDemande: "10/05/2022",
+          dateDemande: "10/05/2023",
         },
         {
-          dateDebut: "05/12/2021",
-          dateFin: "20/12/2021",
+          dateDebut: "05/12/2022",
+          dateFin: "20/12/2022",
           type: "Congé annuel",
           typeClass: "annuel",
           duree: 16,
           statut: "Approuvé",
           statutClass: "approuve",
-          dateDemande: "01/11/2021",
+          dateDemande: "01/11/2022",
+        },
+        {
+          dateDebut: "15/03/2022",
+          dateFin: "20/03/2022",
+          type: "Congés fractionnés",
+          typeClass: "fractionnes",
+          duree: 6,
+          statut: "Approuvé",
+          statutClass: "approuve",
+          dateDemande: "10/03/2022",
+        },
+        {
+          dateDebut: "20/07/2021",
+          dateFin: "05/08/2021",
+          type: "Congé annuel",
+          typeClass: "annuel",
+          duree: 17,
+          statut: "Approuvé",
+          statutClass: "approuve",
+          dateDemande: "15/06/2021",
+        },
+        {
+          dateDebut: "10/12/2021",
+          dateFin: "12/12/2021",
+          type: "Autres congés légaux",
+          typeClass: "autres_legaux",
+          duree: 3,
+          statut: "Approuvé",
+          statutClass: "approuve",
+          dateDemande: "05/12/2021",
         },
       ],
     };
@@ -232,8 +264,8 @@ export default {
       if (this.filtreType !== "all") {
         const typeMap = {
           annuel: "Congé annuel",
-          maladie: "Congé maladie",
-          exceptionnel: "Congé exceptionnel",
+          fractionnes: "Congés fractionnés",
+          autres_legaux: "Autres congés légaux",
         };
         filtered = filtered.filter(
           (conge) => conge.type === typeMap[this.filtreType]
@@ -257,8 +289,8 @@ export default {
       if (this.filtreType !== "all") {
         const typeMap = {
           annuel: "Congé annuel",
-          maladie: "Congé maladie",
-          exceptionnel: "Congé exceptionnel",
+          fractionnes: "Congés fractionnés",
+          autres_legaux: "Autres congés légaux",
         };
         filtered = filtered.filter(
           (conge) => conge.type === typeMap[this.filtreType]
@@ -272,9 +304,8 @@ export default {
     getTypeIcon(typeClass) {
       const icons = {
         annuel: "fas fa-umbrella-beach",
-        maladie: "fas fa-medkit",
-        exceptionnel: "fas fa-calendar-plus",
-        recuperation: "fas fa-clock",
+        fractionnes: "fas fa-calendar-week",
+        autres_legaux: "fas fa-gavel",
       };
       return icons[typeClass] || "fas fa-calendar";
     },
@@ -325,11 +356,11 @@ export default {
 }
 
 .historique-header h2 {
-  color: #1a1a1a;
+  color: #261555;
   font-size: 24px;
   font-weight: 700;
   margin: 0;
-  background: linear-gradient(135deg, #008a9b 0%, #00b4d8 100%);
+  background: linear-gradient(135deg, #008a9b 0%, #b10064 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -354,22 +385,13 @@ export default {
 }
 
 .filter-select {
-  padding: 12px 16px;
-  border: 1.5px solid #e0e0e0;
-  border-radius: 12px;
-  font-size: 14px;
+  padding: 10px 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
   background-color: #f8fafc;
-  color: #1a1a1a;
+  color: #261555;
+  font-size: 14px;
   transition: all 0.3s ease;
-  cursor: pointer;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 16px;
-  padding-right: 40px;
 }
 
 .filter-select:focus {
@@ -390,12 +412,11 @@ export default {
 }
 
 .historique-table th {
-  background: #f8fafc;
-  color: #666;
-  font-size: 14px;
+  background-color: #f8fafc;
+  color: #261555;
   font-weight: 600;
+  padding: 15px 12px;
   text-align: left;
-  padding: 16px;
   border-bottom: 2px solid #e0e0e0;
 }
 
@@ -437,13 +458,13 @@ export default {
 }
 
 .badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 500;
 }
 
 .badge i {
@@ -451,33 +472,28 @@ export default {
 }
 
 .badge-annuel {
-  background: rgba(0, 138, 155, 0.1);
+  background-color: rgba(0, 138, 155, 0.1);
   color: #008a9b;
 }
 
-.badge-maladie {
-  background: rgba(217, 119, 6, 0.1);
-  color: #d97706;
+.badge-fractionnes {
+  background-color: rgba(177, 0, 100, 0.1);
+  color: #b10064;
 }
 
-.badge-exceptionnel {
-  background: rgba(2, 132, 199, 0.1);
-  color: #0284c7;
-}
-
-.badge-recuperation {
-  background: rgba(16, 163, 127, 0.1);
-  color: #10a37f;
+.badge-autres_legaux {
+  background-color: rgba(38, 21, 85, 0.1);
+  color: #261555;
 }
 
 .status {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 500;
 }
 
 .status i {
@@ -485,18 +501,21 @@ export default {
 }
 
 .status-approuve {
-  background: rgba(22, 163, 74, 0.1);
-  color: #16a34a;
+  background-color: rgba(0, 138, 155, 0.1);
+  color: #008a9b;
+  border: 1px solid rgba(0, 138, 155, 0.2);
 }
 
 .status-en_attente {
-  background: rgba(217, 119, 6, 0.1);
-  color: #d97706;
+  background-color: rgba(177, 0, 100, 0.1);
+  color: #b10064;
+  border: 1px solid rgba(177, 0, 100, 0.2);
 }
 
 .status-rejete {
-  background: rgba(220, 38, 38, 0.1);
-  color: #dc2626;
+  background-color: rgba(38, 21, 85, 0.1);
+  color: #261555;
+  border: 1px solid rgba(38, 21, 85, 0.2);
 }
 
 .actions-cell {
@@ -507,21 +526,20 @@ export default {
 .btn-action {
   width: 32px;
   height: 32px;
-  border-radius: 8px;
+  border-radius: 6px;
+  background-color: #f5f5f5;
   border: none;
-  background: #f8fafc;
   color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
 }
 
 .btn-action:hover {
-  background: #008a9b;
+  background-color: #008a9b;
   color: white;
-  transform: translateY(-2px);
 }
 
 .empty-state {
@@ -545,27 +563,23 @@ export default {
 }
 
 .pagination-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  border: 1.5px solid #e0e0e0;
-  background: white;
-  color: #666;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 8px 12px;
+  border: 2px solid #008a9b;
+  background: transparent;
+  color: #008a9b;
+  border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .pagination-btn:hover:not(:disabled) {
-  border-color: #008a9b;
-  color: #008a9b;
-  transform: translateY(-2px);
+  background-color: #008a9b;
+  color: white;
 }
 
 .pagination-btn:disabled {
-  opacity: 0.5;
+  border-color: #e0e0e0;
+  color: #666;
   cursor: not-allowed;
 }
 

@@ -1,6 +1,9 @@
 <template>
   <div class="etat-demandes">
-    <h1>État des Demandes</h1>
+    <div class="page-header">
+      <h1>État des Demandes</h1>
+      <p>Suivez l'évolution de vos demandes de congés</p>
+    </div>
     <EtatDemandes />
   </div>
 </template>
@@ -20,27 +23,30 @@ export default {
 .etat-demandes {
   padding: 2rem;
   min-height: 100vh;
-  background: #f8fafc;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  font-family: "Inter", sans-serif;
 }
 
-h1 {
-  color: #2c3e50;
-  margin-bottom: 2rem;
-  font-size: 2rem;
-  font-weight: 600;
-  position: relative;
+/* Page Header */
+.page-header {
   text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 16px;
+  border-left: 4px solid #008a9b;
 }
 
-h1:after {
-  content: "";
-  position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100px;
-  height: 3px;
-  background: var(--gradient-primary);
-  border-radius: 2px;
+.page-header h1 {
+  color: #261555;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+}
+
+.page-header p {
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin: 0;
 }
 </style>

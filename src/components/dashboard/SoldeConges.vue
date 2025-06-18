@@ -1,167 +1,130 @@
 <template>
   <div class="solde-container">
-    <div class="solde-card main-card">
-      <div class="solde-header">
-        <h2>Solde de congés</h2>
-        <p>
-          Aperçu de vos droits et soldes de congés pour l'année
-          {{ anneeActuelle }}
-        </p>
+    <!-- En-tête simple -->
+    <div class="solde-header">
+      <h1>Mon solde de congés</h1>
+      <p>Année {{ anneeActuelle }}</p>
+    </div>
+
+    <!-- Cartes des congés -->
+    <div class="conges-grid">
+      <!-- Congé annuel -->
+      <div class="conge-card">
+        <div class="conge-title">
+          <i class="fas fa-umbrella-beach"></i>
+          <h3>Congé annuel</h3>
+        </div>
+
+        <div class="conge-stats">
+          <div class="stat-row">
+            <span>Acquis</span>
+            <span class="stat-value">{{ congesAnnuel.acquis }} jours</span>
+          </div>
+          <div class="stat-row">
+            <span>Pris</span>
+            <span class="stat-value taken">{{ congesAnnuel.pris }} jours</span>
+          </div>
+          <div class="stat-row highlight">
+            <span>Reste</span>
+            <span class="stat-value">{{ congesAnnuel.reste }} jours</span>
+          </div>
+        </div>
+
+        <div class="progress-bar">
+          <div
+            class="progress-fill"
+            :style="{ width: congesAnnuel.pourcentage + '%' }"
+          ></div>
+        </div>
+        <div class="progress-text">{{ congesAnnuel.pourcentage }}% utilisé</div>
       </div>
 
-      <div class="solde-summary">
-        <div class="solde-circle">
-          <div class="inner-circle">
-            <span class="solde-days">{{ soldeDisponible }}</span>
-            <span class="solde-label">jours</span>
-          </div>
-          <svg class="progress-ring" width="200" height="200">
-            <circle
-              class="progress-ring__circle-bg"
-              stroke="#f0f0f0"
-              stroke-width="12"
-              fill="transparent"
-              r="80"
-              cx="100"
-              cy="100"
-            />
-            <circle
-              class="progress-ring__circle"
-              stroke="url(#gradient)"
-              stroke-width="12"
-              fill="transparent"
-              r="80"
-              cx="100"
-              cy="100"
-              :stroke-dasharray="circonference"
-              :stroke-dashoffset="dashOffset"
-            />
-            <defs>
-              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color: #008a9b" />
-                <stop offset="100%" style="stop-color: #00b4d8" />
-              </linearGradient>
-            </defs>
-          </svg>
+      <!-- Congés fractionnés -->
+      <div class="conge-card">
+        <div class="conge-title">
+          <i class="fas fa-calendar-week"></i>
+          <h3>Congés fractionnés</h3>
         </div>
 
-        <div class="solde-details">
-          <div class="detail-item">
-            <div class="detail-icon">
-              <i class="fas fa-calendar-check"></i>
-            </div>
-            <div class="detail-content">
-              <span class="detail-label">Total acquis</span>
-              <span class="detail-value">{{ totalAcquis }} jours</span>
-            </div>
+        <div class="conge-stats">
+          <div class="stat-row">
+            <span>Acquis</span>
+            <span class="stat-value">{{ congesFractionnes.acquis }} jours</span>
           </div>
-          <div class="detail-item">
-            <div class="detail-icon">
-              <i class="fas fa-calendar-minus"></i>
-            </div>
-            <div class="detail-content">
-              <span class="detail-label">Congés pris</span>
-              <span class="detail-value">{{ congesPris }} jours</span>
-            </div>
+          <div class="stat-row">
+            <span>Pris</span>
+            <span class="stat-value taken"
+              >{{ congesFractionnes.pris }} jours</span
+            >
           </div>
-          <div class="detail-item">
-            <div class="detail-icon">
-              <i class="fas fa-calendar-plus"></i>
-            </div>
-            <div class="detail-content">
-              <span class="detail-label">Congés planifiés</span>
-              <span class="detail-value">{{ congesPlanifies }} jours</span>
-            </div>
-          </div>
-          <div class="detail-item highlight">
-            <div class="detail-icon">
-              <i class="fas fa-wallet"></i>
-            </div>
-            <div class="detail-content">
-              <span class="detail-label">Solde disponible</span>
-              <span class="detail-value">{{ soldeDisponible }} jours</span>
-            </div>
+          <div class="stat-row highlight">
+            <span>Reste</span>
+            <span class="stat-value">{{ congesFractionnes.reste }} jours</span>
           </div>
         </div>
+
+        <div class="progress-bar">
+          <div
+            class="progress-fill"
+            :style="{ width: congesFractionnes.pourcentage + '%' }"
+          ></div>
+        </div>
+        <div class="progress-text">
+          {{ congesFractionnes.pourcentage }}% utilisé
+        </div>
+      </div>
+
+      <!-- Autres congés -->
+      <div class="conge-card">
+        <div class="conge-title">
+          <i class="fas fa-gavel"></i>
+          <h3>Autres congés légaux</h3>
+        </div>
+
+        <div class="conge-stats">
+          <div class="stat-row">
+            <span>Acquis</span>
+            <span class="stat-value">{{ autresConges.acquis }} jours</span>
+          </div>
+          <div class="stat-row">
+            <span>Pris</span>
+            <span class="stat-value taken">{{ autresConges.pris }} jours</span>
+          </div>
+          <div class="stat-row highlight">
+            <span>Reste</span>
+            <span class="stat-value">{{ autresConges.reste }} jours</span>
+          </div>
+        </div>
+
+        <div class="progress-bar">
+          <div
+            class="progress-fill"
+            :style="{ width: autresConges.pourcentage + '%' }"
+          ></div>
+        </div>
+        <div class="progress-text">{{ autresConges.pourcentage }}% utilisé</div>
       </div>
     </div>
 
-    <div class="solde-cards-grid">
-      <div class="solde-card type-card">
-        <div class="type-header">
-          <div class="type-icon">
-            <i class="fas fa-umbrella-beach"></i>
-          </div>
-          <h3>Congés annuels</h3>
+    <!-- Résumé global -->
+    <div class="resume-section">
+      <h3>Résumé global</h3>
+      <div class="resume-grid">
+        <div class="resume-item">
+          <span class="resume-label">Total acquis</span>
+          <span class="resume-value">{{ totalAcquis }} jours</span>
         </div>
-        <div class="type-details">
-          <div class="detail-row">
-            <span class="detail-label">Acquis</span>
-            <span class="detail-value">22 jours</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Pris</span>
-            <span class="detail-value">8 jours</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Reste</span>
-            <span class="detail-value">14 jours</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress" style="width: 36%"></div>
-          </div>
+        <div class="resume-item">
+          <span class="resume-label">Total pris</span>
+          <span class="resume-value">{{ totalPris }} jours</span>
         </div>
-      </div>
-
-      <div class="solde-card type-card">
-        <div class="type-header">
-          <div class="type-icon">
-            <i class="fas fa-medkit"></i>
-          </div>
-          <h3>Congés maladie</h3>
+        <div class="resume-item">
+          <span class="resume-label">Planifiés</span>
+          <span class="resume-value">{{ congesPlanifies }} jours</span>
         </div>
-        <div class="type-details">
-          <div class="detail-row">
-            <span class="detail-label">Acquis</span>
-            <span class="detail-value">15 jours</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Pris</span>
-            <span class="detail-value">0 jours</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Reste</span>
-            <span class="detail-value">15 jours</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress" style="width: 0%"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="solde-card type-card">
-        <div class="type-header">
-          <div class="type-icon">
-            <i class="fas fa-calendar-plus"></i>
-          </div>
-          <h3>Congés exceptionnels</h3>
-        </div>
-        <div class="type-details">
-          <div class="detail-row">
-            <span class="detail-label">Acquis</span>
-            <span class="detail-value">10 jours</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Pris</span>
-            <span class="detail-value">0 jours</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Reste</span>
-            <span class="detail-value">10 jours</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress" style="width: 0%"></div>
-          </div>
+        <div class="resume-item primary">
+          <span class="resume-label">Solde disponible</span>
+          <span class="resume-value">{{ soldeDisponible }} jours</span>
         </div>
       </div>
     </div>
@@ -174,20 +137,44 @@ export default {
   data() {
     return {
       anneeActuelle: new Date().getFullYear(),
-      totalAcquis: 22,
-      congesPris: 8,
-      congesPlanifies: 0,
-      circonference: 2 * Math.PI * 80,
+      congesAnnuel: {
+        acquis: 25,
+        pris: 12,
+        reste: 13,
+        pourcentage: 48,
+      },
+      congesFractionnes: {
+        acquis: 15,
+        pris: 8,
+        reste: 7,
+        pourcentage: 53,
+      },
+      autresConges: {
+        acquis: 10,
+        pris: 3,
+        reste: 7,
+        pourcentage: 30,
+      },
+      congesPlanifies: 5,
     };
   },
   computed: {
-    soldeDisponible() {
-      return this.totalAcquis - this.congesPris - this.congesPlanifies;
+    totalAcquis() {
+      return (
+        this.congesAnnuel.acquis +
+        this.congesFractionnes.acquis +
+        this.autresConges.acquis
+      );
     },
-    dashOffset() {
-      const pourcentagePris =
-        (this.congesPris + this.congesPlanifies) / this.totalAcquis;
-      return this.circonference * (1 - pourcentagePris);
+    totalPris() {
+      return (
+        this.congesAnnuel.pris +
+        this.congesFractionnes.pris +
+        this.autresConges.pris
+      );
+    },
+    soldeDisponible() {
+      return this.totalAcquis - this.totalPris - this.congesPlanifies;
     },
   },
 };
@@ -195,267 +182,221 @@ export default {
 
 <style scoped>
 .solde-container {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 20px;
+  font-family: "Inter", sans-serif;
 }
 
-.solde-card {
-  background-color: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-  padding: 30px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.solde-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-}
-
-.main-card {
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-}
-
+/* En-tête */
 .solde-header {
-  margin-bottom: 35px;
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border-left: 4px solid #008a9b;
 }
 
-.solde-header h2 {
-  color: #1a1a1a;
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 10px;
-  background: linear-gradient(135deg, #008a9b 0%, #00b4d8 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+.solde-header h1 {
+  color: #261555;
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
 }
 
 .solde-header p {
-  color: #666;
-  font-size: 15px;
-}
-
-.solde-summary {
-  display: flex;
-  align-items: center;
-  gap: 50px;
-}
-
-.solde-circle {
-  position: relative;
-  width: 200px;
-  height: 200px;
-}
-
-.inner-circle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.solde-days {
-  font-size: 48px;
-  font-weight: 700;
-  background: linear-gradient(135deg, #008a9b 0%, #00b4d8 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  line-height: 1;
-}
-
-.solde-label {
+  color: #6c757d;
   font-size: 16px;
-  color: #666;
-  margin-top: 8px;
+  margin: 0;
 }
 
-.progress-ring__circle {
-  transition: stroke-dashoffset 0.5s ease;
-  transform: rotate(-90deg);
-  transform-origin: 50% 50%;
-}
-
-.solde-details {
-  flex: 1;
+/* Grille des congés */
+.conges-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 25px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
 }
 
-.detail-item {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 20px;
-  background: #f8fafc;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-}
-
-.detail-item:hover {
-  background: #f1f5f9;
-  transform: translateY(-2px);
-}
-
-.detail-item.highlight {
-  background: linear-gradient(135deg, #008a9b 0%, #00b4d8 100%);
-  color: white;
-}
-
-.detail-item.highlight .detail-label,
-.detail-item.highlight .detail-value {
-  color: white;
-}
-
-.detail-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+.conge-card {
   background: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  color: #008a9b;
-  box-shadow: 0 4px 10px rgba(0, 138, 155, 0.1);
-}
-
-.detail-item.highlight .detail-icon {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-}
-
-.detail-content {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.detail-label {
-  font-size: 14px;
-  color: #666;
-}
-
-.detail-value {
-  font-size: 20px;
-  font-weight: 600;
-  color: #1a1a1a;
-}
-
-.solde-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 25px;
-}
-
-.type-card {
-  display: flex;
-  flex-direction: column;
-}
-
-.type-header {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 25px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #eee;
-}
-
-.type-icon {
-  width: 45px;
-  height: 45px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #008a9b 0%, #00b4d8 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  color: white;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+  transition: transform 0.2s ease;
 }
 
-.type-header h3 {
-  color: #1a1a1a;
+.conge-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.conge-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.conge-title i {
+  color: #008a9b;
+  font-size: 20px;
+}
+
+.conge-title h3 {
+  color: #261555;
   font-size: 18px;
   font-weight: 600;
   margin: 0;
 }
 
-.type-details {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+/* Statistiques */
+.conge-stats {
+  margin-bottom: 20px;
 }
 
-.detail-row {
+.stat-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
-}
-
-.detail-row .detail-label {
+  padding: 8px 0;
   font-size: 14px;
-  color: #666;
 }
 
-.detail-row .detail-value {
-  font-size: 16px;
+.stat-row span:first-child {
+  color: #6c757d;
+}
+
+.stat-value {
   font-weight: 600;
-  color: #1a1a1a;
+  color: #261555;
 }
 
+.stat-value.taken {
+  color: #b10064;
+}
+
+.stat-row.highlight {
+  background: #f8f9fa;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin: 8px -16px;
+  font-weight: 600;
+}
+
+.stat-row.highlight span:first-child {
+  color: #008a9b;
+}
+
+.stat-row.highlight .stat-value {
+  color: #008a9b;
+}
+
+/* Barre de progression */
 .progress-bar {
   height: 6px;
-  background: #f0f0f0;
+  background: #e9ecef;
   border-radius: 3px;
   overflow: hidden;
-  margin-top: 10px;
+  margin-bottom: 8px;
 }
 
-.progress {
+.progress-fill {
   height: 100%;
-  background: linear-gradient(135deg, #008a9b 0%, #00b4d8 100%);
+  background: linear-gradient(90deg, #008a9b 0%, #b10064 100%);
   border-radius: 3px;
-  transition: width 0.5s ease;
+  transition: width 0.3s ease;
 }
 
-@media (max-width: 992px) {
-  .solde-summary {
-    flex-direction: column;
-    align-items: center;
-    gap: 40px;
+.progress-text {
+  text-align: center;
+  font-size: 12px;
+  color: #6c757d;
+}
+
+/* Section résumé */
+.resume-section {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+}
+
+.resume-section h3 {
+  color: #261555;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+.resume-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.resume-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.resume-item.primary {
+  background: linear-gradient(135deg, #261555 0%, #b10064 100%);
+  color: white;
+}
+
+.resume-label {
+  font-size: 14px;
+  color: #6c757d;
+  margin-bottom: 8px;
+}
+
+.resume-item.primary .resume-label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.resume-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #261555;
+}
+
+.resume-item.primary .resume-value {
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .solde-container {
+    padding: 15px;
   }
 
-  .solde-details {
-    width: 100%;
+  .conges-grid {
+    grid-template-columns: 1fr;
   }
 
-  .solde-cards-grid {
+  .resume-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 768px) {
-  .solde-cards-grid {
+@media (max-width: 480px) {
+  .resume-grid {
     grid-template-columns: 1fr;
   }
 
-  .solde-details {
-    grid-template-columns: 1fr;
-  }
-
-  .solde-card {
+  .conge-card {
     padding: 20px;
   }
 }

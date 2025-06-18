@@ -45,103 +45,148 @@ export const STYLE_CONSTANTS = {
 
 export const useCongesStore = defineStore("conges", {
   state: () => ({
-    // Données pour le dashboard
+    // Données pour le dashboard - basées sur SoldeConges
     stats: {
-      congesRestants: 25,
-      demandesEnCours: 2,
-      demandesApprouvees: 15,
+      congesRestants: 27, // Total des restes (13 + 7 + 7)
+      demandesEnCours: 1, // 1 demande en attente dans EtatDemandes
+      demandesApprouvees: 1, // 1 demande approuvée dans EtatDemandes
     },
+
+    // Prochains congés - basés sur EtatDemandes et HistoriqueConges
     prochainsConges: [
       {
         id: 1,
-        dateDebut: "2024-04-01",
-        dateFin: "2024-04-05",
-        type: "Congés Annuels",
+        dateDebut: "15/08/2023",
+        dateFin: "25/08/2023",
+        type: "Congé annuel",
         statut: "En attente",
       },
       {
         id: 2,
-        dateDebut: "2024-05-15",
-        dateFin: "2024-05-17",
-        type: "Congés Maladie",
+        dateDebut: "15/06/2025",
+        dateFin: "30/06/2025",
+        type: "Congé annuel",
         statut: "Approuvé",
       },
     ],
 
-    // Données pour l'état des demandes
+    // Données pour l'état des demandes - basées sur EtatDemandes
     demandesEnCours: [
       {
         id: 1,
-        dateDebut: "2024-04-01",
-        dateFin: "2024-04-05",
-        type: "Congés Annuels",
-        statut: "En attente",
-        motif: "Vacances familiales",
-        dateDemande: "2024-03-15",
+        type: "Congé annuel",
+        dateDebut: "15/08/2023",
+        dateFin: "25/08/2023",
+        duree: 11,
+        status: "en_attente",
+        etapeActuelle: "Approbation Supérieur Hiérarchique",
+        dateSoumission: "01/08/2023",
       },
       {
         id: 2,
-        dateDebut: "2024-05-15",
-        dateFin: "2024-05-17",
-        type: "Congés Maladie",
-        statut: "En attente",
-        motif: "Rendez-vous médical",
-        dateDemande: "2024-03-20",
-      },
-    ],
-
-    // Données pour l'historique
-    historiqueConges: [
-      {
-        id: 1,
-        dateDebut: "2024-01-15",
-        dateFin: "2024-01-20",
-        type: "Congés Annuels",
-        statut: "Approuvé",
-        motif: "Vacances d'hiver",
-        dateDemande: "2023-12-15",
-        dateValidation: "2023-12-20",
-      },
-      {
-        id: 2,
-        dateDebut: "2024-02-01",
-        dateFin: "2024-02-02",
-        type: "Congés Maladie",
-        statut: "Approuvé",
-        motif: "Rendez-vous médical",
-        dateDemande: "2024-01-25",
-        dateValidation: "2024-01-26",
+        type: "Congé fractionnés",
+        dateDebut: "05/06/2023",
+        dateFin: "12/06/2023",
+        duree: 8,
+        status: "approuve",
+        etapeActuelle: "Approuvé",
+        dateSoumission: "04/06/2023",
       },
       {
         id: 3,
-        dateDebut: "2024-03-05",
-        dateFin: "2024-03-08",
-        type: "Congés Annuels",
-        statut: "Refusé",
-        motif: "Vacances de printemps",
-        dateDemande: "2024-02-15",
-        dateValidation: "2024-02-20",
+        type: "Autres congés légaux",
+        dateDebut: "10/04/2023",
+        dateFin: "15/04/2023",
+        duree: 6,
+        status: "rejete",
+        etapeActuelle: "Rejeté",
+        dateSoumission: "01/04/2023",
+        motifRejet: "Demande hors délai règlementaire",
       },
     ],
 
-    // Données pour le solde
+    // Données pour l'historique - basées sur HistoriqueConges
+    historiqueConges: [
+      {
+        id: 1,
+        dateDebut: "15/06/2025",
+        dateFin: "30/06/2025",
+        type: "Congé annuel",
+        typeClass: "annuel",
+        duree: 16,
+        statut: "Approuvé",
+        statutClass: "approuve",
+        dateDemande: "01/05/2025",
+      },
+      {
+        id: 2,
+        dateDebut: "10/03/2025",
+        dateFin: "15/03/2025",
+        type: "Congés fractionnés",
+        typeClass: "fractionnes",
+        duree: 6,
+        statut: "Approuvé",
+        statutClass: "approuve",
+        dateDemande: "09/03/2025",
+      },
+      {
+        id: 3,
+        dateDebut: "05/01/2024",
+        dateFin: "07/01/2024",
+        type: "Autres congés légaux",
+        typeClass: "autres_legaux",
+        duree: 3,
+        statut: "Approuvé",
+        statutClass: "approuve",
+        dateDemande: "20/12/2023",
+      },
+      {
+        id: 4,
+        dateDebut: "23/11/2024",
+        dateFin: "25/11/2024",
+        type: "Congés fractionnés",
+        typeClass: "fractionnes",
+        duree: 3,
+        statut: "Approuvé",
+        statutClass: "approuve",
+        dateDemande: "15/11/2024",
+      },
+      {
+        id: 5,
+        dateDebut: "01/08/2023",
+        dateFin: "15/08/2023",
+        type: "Congé annuel",
+        typeClass: "annuel",
+        duree: 15,
+        statut: "Approuvé",
+        statutClass: "approuve",
+        dateDemande: "01/07/2023",
+      },
+    ],
+
+    // Données pour le solde - basées sur SoldeConges
     soldeConges: {
-      congesAnnuels: {
-        total: 25,
-        pris: 10,
-        restant: 15,
+      congesAnnuel: {
+        acquis: 25,
+        pris: 12,
+        reste: 13,
+        pourcentage: 48,
       },
-      congesMaladie: {
-        total: 10,
-        pris: 2,
-        restant: 8,
+      congesFractionnes: {
+        acquis: 15,
+        pris: 8,
+        reste: 7,
+        pourcentage: 53,
       },
-      recuperation: {
-        total: 5,
-        pris: 1,
-        restant: 4,
+      autresConges: {
+        acquis: 10,
+        pris: 3,
+        reste: 7,
+        pourcentage: 30,
       },
+      congesPlanifies: 5,
     },
+
     loading: false,
     error: null,
   }),
@@ -161,17 +206,45 @@ export const useCongesStore = defineStore("conges", {
 
     // Getters pour le solde
     getSoldeConges: (state) => state.soldeConges,
+
+    // Getters calculés pour la cohérence
+    getTotalAcquis: (state) => {
+      return (
+        state.soldeConges.congesAnnuel.acquis +
+        state.soldeConges.congesFractionnes.acquis +
+        state.soldeConges.autresConges.acquis
+      );
+    },
+    getTotalPris: (state) => {
+      return (
+        state.soldeConges.congesAnnuel.pris +
+        state.soldeConges.congesFractionnes.pris +
+        state.soldeConges.autresConges.pris
+      );
+    },
+    getSoldeDisponible: (state) => {
+      return (
+        state.soldeConges.congesAnnuel.reste +
+        state.soldeConges.congesFractionnes.reste +
+        state.soldeConges.autresConges.reste -
+        state.soldeConges.congesPlanifies
+      );
+    },
   },
 
   actions: {
     async fetchStats() {
       this.loading = true;
       try {
-        // Données de test temporaires
+        // Mise à jour des stats basées sur les données cohérentes
         this.stats = {
-          congesRestants: 25,
-          demandesEnCours: 2,
-          demandesApprouvees: 15,
+          congesRestants: this.getSoldeDisponible,
+          demandesEnCours: this.demandesEnCours.filter(
+            (d) => d.status === "en_attente"
+          ).length,
+          demandesApprouvees: this.demandesEnCours.filter(
+            (d) => d.status === "approuve"
+          ).length,
         };
       } catch (error) {
         this.error = error.message;
@@ -183,23 +256,21 @@ export const useCongesStore = defineStore("conges", {
     async fetchProchainsConges() {
       this.loading = true;
       try {
-        // Données de test temporaires
+        // Prochains congés basés sur les demandes en cours et l'historique récent
         this.prochainsConges = [
-          {
-            id: 1,
-            dateDebut: "2024-04-01",
-            dateFin: "2024-04-05",
-            type: "Congés Annuels",
-            statut: "En attente",
-          },
-          {
-            id: 2,
-            dateDebut: "2024-05-15",
-            dateFin: "2024-05-17",
-            type: "Congés Maladie",
-            statut: "Approuvé",
-          },
-        ];
+          ...this.demandesEnCours
+            .filter((d) => d.status === "en_attente")
+            .slice(0, 2),
+          ...this.historiqueConges
+            .filter((c) => c.statut === "Approuvé")
+            .slice(0, 2),
+        ].map((item, index) => ({
+          id: index + 1,
+          dateDebut: item.dateDebut,
+          dateFin: item.dateFin,
+          type: item.type,
+          statut: item.status || item.statut,
+        }));
       } catch (error) {
         this.error = error.message;
       } finally {

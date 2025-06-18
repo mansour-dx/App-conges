@@ -1,17 +1,19 @@
 <template>
-  <div class="sidebar">
-    <div class="logo-container">
-      <img
-        src="../../assets/images/logo-senelec.png"
-        alt="Logo SENELEC"
-        class="logo"
-      />
-    </div>
-    <div class="user-info">
-      <div class="avatar">{{ userInitials }}</div>
-      <div class="user-details">
-        <span class="user-name">{{ user.prenom }} {{ user.nom }}</span>
-        <span class="user-function">{{ user.fonction }}</span>
+  <div class="sidebar" :class="{ 'is-open': isOpen }">
+    <div class="user-profile-section">
+      <div class="logo-container"></div>
+      <div class="user-info">
+        <div class="avatar">
+          <img
+            src="../../assets/images/logo-senelec.png"
+            alt="Logo SENELEC"
+            class="avatar-logo"
+          />
+        </div>
+        <div class="user-details">
+          <span class="user-name">{{ user.prenom }} {{ user.nom }}</span>
+          <span class="user-function">{{ user.fonction }}</span>
+        </div>
       </div>
     </div>
     <nav class="sidebar-nav">
@@ -58,6 +60,12 @@
 <script>
 export default {
   name: "SidebarEmploye",
+  props: {
+    isOpen: {
+      type: Boolean,
+      default: true,
+    },
+  },
   data() {
     return {
       user: {
@@ -79,14 +87,10 @@ export default {
 .sidebar {
   width: 250px;
   height: 100vh;
-  background: linear-gradient(
-    180deg,
-    rgba(16, 6, 68, 0.95) 0%,
-    rgba(38, 21, 85, 0.95) 100%
-  );
+  background-color: var(--primary-color);
   backdrop-filter: blur(10px);
   color: white;
-  padding: 25px 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -97,57 +101,62 @@ export default {
   transition: all 0.3s ease;
 }
 
-.logo-container {
-  padding: 0 25px 25px;
+.sidebar.is-open {
+  transform: translateX(0%);
+}
+
+.sidebar:not(.is-open) {
+  transform: translateX(-250px);
+}
+
+.user-profile-section {
+  background-color: var(--secondary-color);
+  padding: 15px 0 15px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 25px;
-  text-align: center;
+  margin-bottom: 0;
 }
 
-.logo {
-  max-width: 140px;
-  height: auto;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-  transition: transform 0.3s ease;
-}
-
-.logo:hover {
-  transform: scale(1.05);
+.logo-container {
+  /* Ce bloc est vide car le logo a été déplacé */
 }
 
 .user-info {
   display: flex;
   align-items: center;
-  padding: 0 25px 25px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 30px;
+  padding: 25px;
+  border-bottom: none;
+  margin-bottom: 0;
   transition: transform 0.3s ease;
 }
 
 .user-info:hover {
-  transform: translateX(5px);
+  transform: translateX(0);
 }
 
 .avatar {
   width: 48px;
   height: 48px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #008a9b, #00b4c3);
+  border-radius: 50%;
+  background-color: var(--primary-color);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  margin-right: 15px;
-  font-size: 16px;
-  box-shadow: 0 4px 15px rgba(0, 138, 155, 0.3);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
   transition: all 0.3s ease;
+  margin-right: 25px;
+}
+
+.avatar-logo {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
 }
 
 .avatar:hover {
   transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(0, 138, 155, 0.4);
-  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .user-details {
@@ -171,20 +180,31 @@ export default {
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 0 15px;
+  padding: 15px 15px;
 }
 
 .nav-item {
   display: flex;
   align-items: center;
-  padding: 12px 20px;
+  padding: 12px 30px;
   border-radius: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.9);
   text-decoration: none;
   margin-bottom: 8px;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+}
+
+.nav-item i {
+  color: #ffdd00;
+  margin-right: 15px;
+  font-size: 24px;
+}
+
+.nav-item span {
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .nav-item::before {
@@ -194,54 +214,24 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), transparent);
+  background: rgba(255, 255, 255, 0.1);
   transform: translateX(-100%);
   transition: transform 0.3s ease;
+  z-index: -1;
 }
 
 .nav-item:hover::before {
   transform: translateX(0);
 }
 
-.nav-item i {
-  margin-right: 15px;
-  width: 20px;
-  text-align: center;
-  font-size: 16px;
-  position: relative;
-  z-index: 1;
-}
-
-.nav-item span {
-  position: relative;
-  z-index: 1;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.nav-item:hover {
-  color: white;
-  transform: translateX(5px);
-}
-
 .nav-item.active {
-  background: linear-gradient(90deg, #008a9b, rgba(0, 138, 155, 0.8));
+  background: rgba(0, 138, 155, 0.25);
   color: white;
-  font-weight: 500;
-  box-shadow: 0 4px 15px rgba(0, 138, 155, 0.3);
-}
-
-.nav-item.active::before {
-  display: none;
 }
 
 @media (max-width: 1024px) {
   .sidebar {
     width: 200px;
-  }
-
-  .logo {
-    max-width: 120px;
   }
 
   .nav-item {
@@ -254,8 +244,8 @@ export default {
     transform: translateX(-100%);
   }
 
-  .sidebar.active {
-    transform: translateX(0);
+  .sidebar.is-open {
+    transform: translateX(0%);
   }
 }
 </style>

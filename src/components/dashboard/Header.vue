@@ -1,6 +1,15 @@
 <template>
   <header class="dashboard-header">
     <div class="header-left">
+      <button
+        @click="$emit('toggle-sidebar')"
+        class="hamburger-menu"
+        :class="{ 'is-active': isSidebarOpen }"
+      >
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
       <h1 class="header-title">{{ pageTitle }}</h1>
       <div class="search-bar">
         <i class="fas fa-search"></i>
@@ -27,12 +36,17 @@ export default {
       type: String,
       default: "Tableau de bord",
     },
+    isSidebarOpen: {
+      type: Boolean,
+      default: true,
+    },
   },
+  emits: ["toggle-sidebar"],
   data() {
     return {
       user: {
-        nom: "Diallo",
-        prenom: "Amadou",
+        nom: "Diop",
+        prenom: "Mansour",
       },
     };
   },
@@ -63,6 +77,41 @@ export default {
   display: flex;
   align-items: center;
   gap: 25px;
+}
+
+.hamburger-menu {
+  display: flex; /* Toujours visible */
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 25px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 10;
+}
+
+.hamburger-menu .bar {
+  width: 100%;
+  height: 3px;
+  background-color: #261555; /* Couleur du violet foncé de SENELEC */
+  border-radius: 10px;
+  transition: all 0.3s linear;
+  position: relative;
+  transform-origin: 1px;
+}
+
+.hamburger-menu.is-active .bar:nth-child(1) {
+  transform: rotate(45deg);
+}
+
+.hamburger-menu.is-active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-menu.is-active .bar:nth-child(3) {
+  transform: rotate(-45deg);
 }
 
 .header-title {
@@ -193,25 +242,36 @@ export default {
 }
 
 @media (max-width: 768px) {
-  .dashboard-header {
-    padding: 15px 20px;
-    flex-wrap: wrap;
-    gap: 15px;
+  .header-left {
+    gap: 15px; /* Réduire l'espacement lorsque le hamburger est visible */
   }
 
-  .header-left {
-    width: 100%;
-    justify-content: space-between;
+  .header-title {
+    font-size: 20px;
   }
 
   .search-bar {
-    width: 100%;
-    order: 3;
+    width: 200px;
   }
 
   .header-right {
     width: 100%;
     justify-content: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-title {
+    font-size: 18px;
+  }
+
+  .search-bar {
+    width: 150px;
+  }
+
+  .header-right .notification,
+  .header-right .user-avatar {
+    display: none; /* Masquer les notifications et l'avatar sur très petits écrans */
   }
 }
 </style>

@@ -1,9 +1,17 @@
 <template>
   <div class="employe-dashboard">
-    <SidebarEmploye />
+    <SidebarEmploye :is-open="isSidebarOpen" />
 
-    <div class="dashboard-content">
-      <Header :pageTitle="currentPageTitle" />
+    <div
+      class="dashboard-content"
+      :class="{ 'sidebar-closed': !isSidebarOpen }"
+    >
+      <Header
+        v-if="shouldShowHeader"
+        :pageTitle="currentPageTitle"
+        @toggle-sidebar="toggleSidebar"
+        :is-sidebar-open="isSidebarOpen"
+      />
 
       <div class="content-container">
         <router-view v-slot="{ Component }">
@@ -26,6 +34,16 @@ export default {
     SidebarEmploye,
     Header,
   },
+  data() {
+    return {
+      isSidebarOpen: false, // Changer à false pour tester le masquage initial
+    };
+  },
+  methods: {
+    toggleSidebar() {
+      this.isSidebarOpen = !this.isSidebarOpen;
+    },
+  },
   computed: {
     currentPageTitle() {
       // Obtenir le titre en fonction de la route actuelle
@@ -39,6 +57,23 @@ export default {
       if (routePath.includes("/settings")) return "Paramètres";
 
       return "Tableau de bord"; // Par défaut
+    },
+    shouldShowHeader() {
+      // Masquer le header quand on est sur la page de gestion des demandes
+      // et qu'un formulaire spécifique est affiché
+      const routePath = this.$route.path;
+
+      // Si on est sur la page de gestion des demandes
+      if (routePath.includes("/gestion-demandes")) {
+        // Vérifier si un formulaire est sélectionné via les query params
+        const hasSelectedForm =
+          this.$route.query.form === "planification" ||
+          this.$route.query.form === "report" ||
+          this.$route.query.form === "absence";
+        return !hasSelectedForm;
+      }
+
+      return true; // Afficher le header pour toutes les autres pages
     },
   },
 };
@@ -87,6 +122,11 @@ export default {
   margin-left: 250px; /* Correspond à la largeur du sidebar */
   position: relative;
   z-index: 1;
+  transition: margin-left 0.3s ease; /* Ajouter une transition pour le mouvement */
+}
+
+.dashboard-content.sidebar-closed {
+  margin-left: 0; /* Lorsque la barre latérale est fermée, le contenu prend toute la largeur */
 }
 
 .content-container {
@@ -122,8 +162,12 @@ export default {
 
 @media (max-width: 768px) {
   .dashboard-content {
-    margin-left: 0;
+    margin-left: 0; /* Sur mobile, le contenu est toujours à 0 margin-left */
     padding: 15px;
+  }
+
+  .dashboard-content.sidebar-closed {
+    margin-left: 0; /* Assurez-vous que cela reste 0 sur mobile */
   }
 
   .content-container {

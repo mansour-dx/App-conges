@@ -57,6 +57,8 @@
           <label>Poste :</label>
           <input type="text" v-model="formData.poste" />
         </div>
+      </div>
+      <div class="ligne-champs">
         <div class="champ">
           <label>Adresse :</label>
           <input type="text" v-model="formData.adresse" />
@@ -218,41 +220,43 @@
         </div>
       </div>
 
-      <div class="drh-approbation-row-v2">
-        <div class="drh-label-v2">
-          Approbation du Directeur des Ressources Humaines
-        </div>
-        <div class="signature-area-drh">
-          <div class="signature-pad" @click="ouvrirPadSignature('directeurRH')">
-            <div v-if="formData.signatureDirecteurRH" class="signature-image">
-              <img :src="formData.signatureDirecteurRH" alt="Signature" />
-            </div>
-            <div v-else class="signature-placeholder">
-              <i class="fas fa-upload"></i>
-              <span>Upload Signature</span>
-            </div>
+      <div class="drh-decision-absence">
+        Approbation du Directeur des Ressources Humaines
+        <div class="signature-pad" @click="ouvrirPadSignature('directeurRH')">
+          <div v-if="formData.signatureDirecteurRH" class="signature-image">
+            <img :src="formData.signatureDirecteurRH" alt="Signature" />
           </div>
-          <div class="signature-line"></div>
+          <div v-else class="signature-placeholder">
+            <i class="fas fa-upload"></i>
+            <span>Upload Signature</span>
+          </div>
         </div>
+        <div class="signature-line"></div>
       </div>
 
       <div class="note-bas">
         <sup>1</sup> Dans les Unités opérationnelles et Délégations Régionales
       </div>
+
       <div class="actions-print">
-        <button type="button" @click="imprimerFiche" :disabled="!peutImprimer">
+        <button
+          type="button"
+          @click="imprimerFiche"
+          :disabled="!peutImprimer"
+          class="btn-print"
+        >
           Imprimer
         </button>
         <button
           type="button"
-          class="btn-envoyer"
           @click="envoyerDemande"
           :disabled="demandeEnvoyee"
+          class="btn-send"
         >
           Envoyer la demande
         </button>
       </div>
-      <div v-if="confirmation" class="confirmation-message">
+      <div v-if="demandeEnvoyee" class="confirmation-message">
         Demande envoyée avec succès !
       </div>
     </form>
@@ -446,9 +450,11 @@ export default {
 }
 
 .champ label {
-  min-width: 110px;
-  font-size: 14px;
+  display: block;
+  margin-bottom: 8px;
   font-weight: 500;
+  color: #424242;
+  font-size: 14px;
 }
 
 .section-report {
@@ -483,16 +489,6 @@ export default {
   padding-bottom: 20px;
 }
 
-.signature-line {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80%;
-  height: 1px;
-  background-color: #333;
-}
-
 .signature-pad {
   width: 250px;
   height: 120px;
@@ -516,15 +512,19 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
   color: #666;
-  text-align: center;
-  padding: 1rem;
+  position: relative;
+  width: 100%;
 }
 
 .signature-placeholder i {
   font-size: 24px;
-  color: #008a9b;
+  margin-bottom: 8px;
+}
+
+.signature-placeholder span {
+  font-size: 14px;
+  margin-bottom: 8px;
 }
 
 .signature-image {
@@ -549,10 +549,9 @@ export default {
 }
 
 .note-bas {
-  font-size: 12px;
-  color: #888;
-  margin-top: 10px;
-  text-align: left;
+  font-size: 0.9em;
+  color: #666;
+  margin-top: 20px;
 }
 
 .actions-print {
@@ -710,24 +709,130 @@ export default {
   padding-bottom: 5px;
 }
 
-.signature-area-drh {
+.drh-decision-absence {
+  margin-top: 30px;
+  text-align: left;
+  font-weight: 500;
+}
+
+.signature-pad {
+  width: 200px;
+  height: 100px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: #f8f8f8;
+  transition: all 0.3s ease;
+  margin: 10px 0;
+}
+
+.signature-pad:hover {
+  border-color: #1976d2;
+  background-color: #f0f7ff;
+}
+
+.signature-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.signature-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.signature-placeholder {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  min-width: 200px;
-  position: relative;
-  padding-bottom: 20px;
+  color: #666;
+}
+
+.signature-placeholder i {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.signature-placeholder span {
+  font-size: 14px;
+}
+
+.signature-line {
+  width: 200px;
+  height: 1px;
+  background-color: #000;
+  margin-top: 5px;
+}
+
+.note-absence {
+  font-size: 0.9em;
+  color: #666;
   margin-top: 10px;
 }
 
-.drh-approbation-row-v2 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 15px;
-  gap: 10px;
-  margin-top: 20px;
-  /* Removed border here */
+input[type="text"],
+input[type="date"],
+input[type="number"],
+select,
+textarea {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background-color: #ffffff;
+  color: #374151;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+input[type="text"]:hover,
+input[type="date"]:hover,
+input[type="number"]:hover,
+select:hover,
+textarea:hover {
+  border-color: #9ca3af;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+  border-color: #008a9b;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 138, 155, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
+  background-size: 12px;
+  padding-right: 20px;
+}
+
+/* Style pour l'impression */
+@media print {
+  input[type="text"],
+  input[type="date"],
+  input[type="number"],
+  select,
+  textarea {
+    border: 1px solid #000000;
+    box-shadow: none;
+    transform: none;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }
 </style>

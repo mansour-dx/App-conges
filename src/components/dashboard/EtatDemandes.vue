@@ -2,7 +2,7 @@
   <div class="etat-demandes">
     <div class="filter-bar">
       <div class="filter-group">
-        <label for="statusFilter">Statut</label>
+        <label for="statusFilter"> <i class="fas fa-filter"></i> Statut </label>
         <select id="statusFilter" v-model="filters.status">
           <option value="all">Tous</option>
           <option value="en_attente">En attente</option>
@@ -12,21 +12,24 @@
       </div>
 
       <div class="filter-group">
-        <label for="typeFilter">Type</label>
+        <label for="typeFilter"> <i class="fas fa-tags"></i> Type </label>
         <select id="typeFilter" v-model="filters.type">
           <option value="all">Tous</option>
           <option value="annuel">Congé annuel</option>
-          <option value="maladie">Congé maladie</option>
-          <option value="exceptionnel">Congé exceptionnel</option>
+          <option value="fractionnes">Congés fractionnés</option>
+          <option value="autres_legaux">Autres congés légaux</option>
         </select>
       </div>
 
       <div class="filter-group">
-        <label for="yearFilter">Année</label>
+        <label for="yearFilter">
+          <i class="fas fa-calendar-alt"></i> Année
+        </label>
         <select id="yearFilter" v-model="filters.year">
+          <option value="all">Toutes</option>
+          <option value="2025">2025</option>
+          <option value="2024">2024</option>
           <option value="2023">2023</option>
-          <option value="2022">2022</option>
-          <option value="2021">2021</option>
         </select>
       </div>
     </div>
@@ -98,7 +101,7 @@ export default {
       filters: {
         status: "all",
         type: "all",
-        year: "2023",
+        year: "all",
       },
       demandes: [
         {
@@ -113,7 +116,7 @@ export default {
         },
         {
           id: 2,
-          type: "Congé maladie",
+          type: "Congé fractionnés",
           dateDebut: "05/06/2023",
           dateFin: "12/06/2023",
           duree: 8,
@@ -123,7 +126,7 @@ export default {
         },
         {
           id: 3,
-          type: "Congé exceptionnel",
+          type: "Autres congés légaux",
           dateDebut: "10/04/2023",
           dateFin: "15/04/2023",
           duree: 6,
@@ -148,6 +151,11 @@ export default {
           demande.type !== this.convertTypeFilter(this.filters.type)
         )
           return false;
+        if (
+          this.filters.year !== "all" &&
+          !this.isDemandeInYear(demande, this.filters.year)
+        )
+          return false;
         return true;
       });
     },
@@ -156,8 +164,8 @@ export default {
     convertTypeFilter(type) {
       const typeMap = {
         annuel: "Congé annuel",
-        maladie: "Congé maladie",
-        exceptionnel: "Congé exceptionnel",
+        fractionnes: "Congé fractionnés",
+        autres_legaux: "Autres congés légaux",
       };
       return typeMap[type] || "";
     },
@@ -190,6 +198,15 @@ export default {
       console.log("Voir détails de la demande:", demande.id);
       // Ouvrir modal ou naviguer vers page détaillée
     },
+    isDemandeInYear(demande, year) {
+      // Extraire l'année de la date de début (format DD/MM/YYYY)
+      const dateParts = demande.dateDebut.split("/");
+      if (dateParts.length === 3) {
+        const demandeYear = parseInt(dateParts[2]);
+        return demandeYear === parseInt(year);
+      }
+      return false;
+    },
   },
 };
 </script>
@@ -206,33 +223,67 @@ export default {
   display: flex;
   gap: 20px;
   margin-bottom: 25px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #eee;
+  padding: 20px;
+  border-bottom: 2px solid #f0f0f0;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 12px;
+  position: relative;
 }
 
 .filter-group {
   display: flex;
   flex-direction: column;
   min-width: 150px;
+  position: relative;
 }
 
 .filter-group label {
-  font-size: 12px;
-  margin-bottom: 6px;
-  color: #666;
+  font-size: 13px;
+  margin-bottom: 8px;
+  color: #374151;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-group label i {
+  color: #008a9b;
+  font-size: 14px;
 }
 
 .filter-group select {
-  padding: 10px 12px;
-  border: 1.5px solid #e0e0e0;
+  padding: 12px 16px;
+  border: 2px solid #d1d5db;
   border-radius: 8px;
   font-size: 14px;
-  background-color: #f9f9f9;
+  background-color: white;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.filter-group select:hover {
+  border-color: #9ca3af;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .filter-group select:focus {
   border-color: #008a9b;
   outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 138, 155, 0.1);
+}
+
+.filter-group::after {
+  content: "▼";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6b7280;
+  pointer-events: none;
+  font-size: 12px;
 }
 
 .demandes-list {
@@ -249,8 +300,8 @@ export default {
 }
 
 .demande-card.status-pending {
-  border-left-color: #ffc107;
-  background-color: rgba(255, 193, 7, 0.05);
+  border-left-color: #b10064;
+  background-color: rgba(177, 0, 100, 0.05);
 }
 
 .demande-card.status-approved {
@@ -259,8 +310,8 @@ export default {
 }
 
 .demande-card.status-rejected {
-  border-left-color: #dc3545;
-  background-color: rgba(220, 53, 69, 0.05);
+  border-left-color: #261555;
+  background-color: rgba(38, 21, 85, 0.05);
 }
 
 .demande-header {
@@ -291,18 +342,21 @@ export default {
 }
 
 .status-pending .demande-status {
-  background-color: #fff8e1;
-  color: #f57c00;
+  background-color: rgba(177, 0, 100, 0.15);
+  color: #b10064;
+  border: 1px solid rgba(177, 0, 100, 0.3);
 }
 
 .status-approved .demande-status {
   background-color: rgba(0, 138, 155, 0.15);
   color: #008a9b;
+  border: 1px solid rgba(0, 138, 155, 0.3);
 }
 
 .status-rejected .demande-status {
-  background-color: #ffebee;
-  color: #c62828;
+  background-color: rgba(38, 21, 85, 0.15);
+  color: #261555;
+  border: 1px solid rgba(38, 21, 85, 0.3);
 }
 
 .demande-actions {
