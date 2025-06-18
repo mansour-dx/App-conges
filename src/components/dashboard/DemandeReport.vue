@@ -13,18 +13,8 @@
         <div class="sous-titre">Demande de Report de Congés</div>
       </div>
       <div class="entete-infos">
-        <div class="date-creation-container">
-          <span>Date création :</span>
-          <input
-            type="date"
-            v-model="formData.dateCreation"
-            class="date-input-hidden-print"
-          />
-          <span class="date-display-only-print">{{
-            formatDate(formData.dateCreation)
-          }}</span>
-        </div>
-        <div>Réf : PS1-FOR-XXX-a</div>
+        <div>Date de création : 26/03/18</div>
+        <div>Réf : PS1-FOR-018-a</div>
         <div>Page 1 / 1</div>
       </div>
     </div>
@@ -75,31 +65,26 @@
         <div class="section-titre">Détails du Report :</div>
         <div class="ligne-champs">
           <div class="champ">
-            <label>Année des congés à reporter :</label>
-            <select v-model="formData.annee" required>
-              <option value="">Sélectionnez une année</option>
-              <option :value="currentYear - 1">{{ currentYear - 1 }}</option>
-              <option :value="currentYear">{{ currentYear }}</option>
-            </select>
+            <label>Date congé DRH :</label>
+            <input type="date" v-model="formData.dateCongeDRH" required />
           </div>
           <div class="champ">
-            <label>Nombre de jours à reporter :</label>
+            <label>Date départ prévue :</label>
             <input
-              type="number"
-              v-model="formData.joursAReporter"
-              min="1"
-              max="30"
+              type="date"
+              v-model="formData.dateDepartPrevue"
+              :min="minDateReport"
               required
             />
           </div>
         </div>
         <div class="ligne-champs">
           <div class="champ">
-            <label>Date souhaitée du report :</label>
+            <label>Joindre bulletin :</label>
             <input
-              type="date"
-              v-model="formData.dateReport"
-              :min="minDateReport"
+              type="file"
+              @change="handleFileUpload"
+              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
               required
             />
           </div>
@@ -289,9 +274,9 @@ export default {
         poste: "",
         adresse: "",
         telephone: "",
-        annee: "",
-        joursAReporter: null,
-        dateReport: "",
+        dateCongeDRH: "",
+        dateDepartPrevue: "",
+        bulletin: null,
         motif: "",
         dateDemande: new Date().toISOString().split("T")[0],
         dateCreation: new Date().toISOString().split("T")[0],
@@ -359,6 +344,16 @@ export default {
       this.formData[
         `signature${type.charAt(0).toUpperCase() + type.slice(1)}`
       ] = signatureData;
+    },
+    handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.formData.bulletin = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
     },
   },
 };

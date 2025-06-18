@@ -13,18 +13,8 @@
         <div class="sous-titre">Demande d'autorisation d'absence</div>
       </div>
       <div class="entete-infos">
-        <div class="date-creation-container">
-          <span>Date création :</span>
-          <input
-            type="date"
-            v-model="formData.dateCreation"
-            class="date-input-hidden-print"
-          />
-          <span class="date-display-only-print">{{
-            formatDate(formData.dateCreation)
-          }}</span>
-        </div>
-        <div>Réf : PS1-FOR-018-b</div>
+        <div>Date de création : 26/03/18</div>
+        <div>Réf : PS1-FOR-017-a</div>
         <div>Page 1 / 1</div>
       </div>
     </div>

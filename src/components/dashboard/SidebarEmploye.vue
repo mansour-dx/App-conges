@@ -116,10 +116,6 @@ export default {
   margin-bottom: 0;
 }
 
-.logo-container {
-  /* Ce bloc est vide car le logo a été déplacé */
-}
-
 .user-info {
   display: flex;
   align-items: center;
@@ -197,9 +193,14 @@ export default {
 }
 
 .nav-item i {
-  color: #ffdd00;
+  color: #b10064;
   margin-right: 15px;
   font-size: 24px;
+  transition: color 0.3s ease;
+}
+
+.nav-item:hover i {
+  color: white;
 }
 
 .nav-item span {
@@ -222,6 +223,7 @@ export default {
 
 .nav-item:hover::before {
   transform: translateX(0);
+  background: #261555;
 }
 
 .nav-item.active {
