@@ -671,17 +671,9 @@ export default {
   gap: 10px;
 }
 
-.rh-validation-col:first-child {
-  /* J'ai supprimé la bordure droite ici pour enlever la ligne verticale */
-}
-
 .approbation-cell-visa {
   text-align: center;
   width: 50%;
-}
-
-.approbation-cell-visa:first-child {
-  /* J'ai supprimé la bordure droite ici pour enlever la ligne verticale */
 }
 
 .approbation-cell-validation {

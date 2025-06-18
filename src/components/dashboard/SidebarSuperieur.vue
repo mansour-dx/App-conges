@@ -17,55 +17,84 @@
           <span class="user-function">{{ user.fonction }}</span>
           <div class="user-role-container">
             <div class="connection-indicator"></div>
-            <span class="user-role">Employé</span>
+            <span class="user-role">Supérieur Hiérarchique</span>
           </div>
         </div>
       </div>
     </div>
     <nav class="sidebar-nav">
-      <router-link
-        to="/employe/dashboard"
-        class="nav-item"
-        active-class="active"
-      >
-        <i class="fas fa-tachometer-alt"></i>
-        <span>Dashboard</span>
-      </router-link>
-      <router-link
-        to="/employe/gestion-demandes"
-        class="nav-item"
-        active-class="active"
-      >
-        <i class="fas fa-tasks"></i>
-        <span>Gestion des Demandes</span>
-      </router-link>
-      <router-link
-        to="/employe/etat-demandes"
-        class="nav-item"
-        active-class="active"
-      >
-        <i class="fas fa-list-check"></i>
-        <span>État des demandes</span>
-      </router-link>
-      <router-link to="/employe/solde" class="nav-item" active-class="active">
-        <i class="fas fa-wallet"></i>
-        <span>Solde de congés</span>
-      </router-link>
-      <router-link
-        to="/employe/historique"
-        class="nav-item"
-        active-class="active"
-      >
-        <i class="fas fa-history"></i>
-        <span>Historique</span>
-      </router-link>
+      <!-- Menu principal (comme employé) -->
+      <div class="nav-section">
+        <h3 class="nav-section-title">Mon Espace</h3>
+        <router-link
+          to="/superieur/dashboard"
+          class="nav-item"
+          active-class="active"
+        >
+          <i class="fas fa-tachometer-alt"></i>
+          <span>Dashboard</span>
+        </router-link>
+        <router-link
+          to="/superieur/gestion-demandes"
+          class="nav-item"
+          active-class="active"
+        >
+          <i class="fas fa-tasks"></i>
+          <span>Gestion des Demandes</span>
+        </router-link>
+        <router-link
+          to="/superieur/etat-demandes"
+          class="nav-item"
+          active-class="active"
+        >
+          <i class="fas fa-list-check"></i>
+          <span>État des demandes</span>
+        </router-link>
+        <router-link
+          to="/superieur/solde"
+          class="nav-item"
+          active-class="active"
+        >
+          <i class="fas fa-wallet"></i>
+          <span>Solde de congés</span>
+        </router-link>
+        <router-link
+          to="/superieur/historique"
+          class="nav-item"
+          active-class="active"
+        >
+          <i class="fas fa-history"></i>
+          <span>Historique</span>
+        </router-link>
+      </div>
+
+      <!-- Menu spécifique au supérieur hiérarchique -->
+      <div class="nav-section">
+        <h3 class="nav-section-title">Validation</h3>
+        <router-link
+          to="/superieur/demandes-en-attente"
+          class="nav-item"
+          active-class="active"
+        >
+          <i class="fas fa-list"></i>
+          <span>Liste des demandes</span>
+        </router-link>
+        <router-link
+          to="/superieur/validation-demandes"
+          class="nav-item"
+          active-class="active"
+        >
+          <i class="fas fa-check-circle"></i>
+          <span>Validation des demandes</span>
+        </router-link>
+      </div>
     </nav>
   </div>
 </template>
 
 <script>
 export default {
-  name: "SidebarEmploye",
+  name: "SidebarSuperieur",
   props: {
     isOpen: {
       type: Boolean,
@@ -78,8 +107,9 @@ export default {
       user: {
         nom: "Diop",
         prenom: "Mansour",
-        fonction: "Ingénieur Logiciel",
+        fonction: "Chef de Service",
       },
+      demandesEnAttente: 3,
     };
   },
   computed: {
@@ -174,12 +204,12 @@ export default {
 .user-function {
   font-size: 12px;
   color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 2px;
 }
 
 .user-role-container {
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
 .user-role {
@@ -222,6 +252,42 @@ export default {
   display: flex;
   flex-direction: column;
   padding: 15px 15px;
+  gap: 20px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.nav-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 10px;
+  padding-left: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .nav-item {
@@ -242,10 +308,6 @@ export default {
   margin-right: 15px;
   font-size: 24px;
   transition: color 0.3s ease;
-}
-
-.nav-item:hover i {
-  color: white;
 }
 
 .nav-item span {
@@ -271,28 +333,77 @@ export default {
   background: #261555;
 }
 
+.nav-item:hover i {
+  color: white;
+}
+
 .nav-item.active {
   background: rgba(0, 138, 155, 0.25);
   color: white;
 }
 
-@media (max-width: 1024px) {
-  .sidebar {
-    width: 200px;
-  }
+.nav-item.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
 
-  .nav-item {
-    padding: 10px 15px;
+.nav-item.disabled:hover {
+  background: transparent;
+  transform: none;
+}
+
+.nav-item.disabled i {
+  color: rgba(177, 0, 100, 0.5);
+}
+
+.badge {
+  background-color: #ff4757;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: auto;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
   }
 }
 
 @media (max-width: 768px) {
   .sidebar {
-    transform: translateX(-100%);
+    width: 200px;
   }
 
-  .sidebar.is-open {
-    transform: translateX(0%);
+  .sidebar:not(.is-open) {
+    transform: translateX(-200px);
+  }
+
+  .nav-item {
+    padding: 10px 20px;
+  }
+
+  .nav-item i {
+    font-size: 20px;
+    margin-right: 12px;
+  }
+
+  .nav-item span {
+    font-size: 13px;
   }
 }
 

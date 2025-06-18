@@ -1,6 +1,9 @@
 <template>
-  <div class="employe-dashboard">
-    <SidebarEmploye :is-open="isSidebarOpen" @toggle-sidebar="toggleSidebar" />
+  <div class="superieur-dashboard">
+    <SidebarSuperieur
+      :is-open="isSidebarOpen"
+      @toggle-sidebar="toggleSidebar"
+    />
 
     <div
       class="dashboard-content"
@@ -20,18 +23,18 @@
 </template>
 
 <script>
-import SidebarEmploye from "@/components/dashboard/SidebarEmploye.vue";
+import SidebarSuperieur from "@/components/dashboard/SidebarSuperieur.vue";
 import Header from "@/components/dashboard/Header.vue";
 
 export default {
-  name: "EmployeDashboard",
+  name: "SuperieurDashboard",
   components: {
-    SidebarEmploye,
+    SidebarSuperieur,
     Header,
   },
   data() {
     return {
-      isSidebarOpen: true, // Changer à true pour que la sidebar soit visible par défaut
+      isSidebarOpen: true,
     };
   },
   methods: {
@@ -41,7 +44,6 @@ export default {
   },
   computed: {
     currentPageTitle() {
-      // Obtenir le titre en fonction de la route actuelle
       const routePath = this.$route.path;
 
       if (routePath.includes("/planification"))
@@ -49,18 +51,18 @@ export default {
       if (routePath.includes("/etat-demandes")) return "État des demandes";
       if (routePath.includes("/solde")) return "Solde de congés";
       if (routePath.includes("/historique")) return "Historique des congés";
+      if (routePath.includes("/validation-demandes"))
+        return "Validation des demandes";
+      if (routePath.includes("/demandes-en-attente"))
+        return "Liste des demandes";
       if (routePath.includes("/settings")) return "Paramètres";
 
-      return "Tableau de bord"; // Par défaut
+      return "Tableau de bord";
     },
     shouldShowHeader() {
-      // Masquer le header quand on est sur la page de gestion des demandes
-      // et qu'un formulaire spécifique est affiché
       const routePath = this.$route.path;
 
-      // Si on est sur la page de gestion des demandes
       if (routePath.includes("/gestion-demandes")) {
-        // Vérifier si un formulaire est sélectionné via les query params
         const hasSelectedForm =
           this.$route.query.form === "planification" ||
           this.$route.query.form === "report" ||
@@ -68,14 +70,14 @@ export default {
         return !hasSelectedForm;
       }
 
-      return true; // Afficher le header pour toutes les autres pages
+      return true;
     },
   },
 };
 </script>
 
 <style scoped>
-.employe-dashboard {
+.superieur-dashboard {
   display: flex;
   min-height: 100vh;
   background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
@@ -83,7 +85,7 @@ export default {
   overflow: hidden;
 }
 
-.employe-dashboard::before {
+.superieur-dashboard::before {
   content: "";
   position: absolute;
   top: -50%;
@@ -114,14 +116,14 @@ export default {
 .dashboard-content {
   flex: 1;
   padding: 25px;
-  margin-left: 250px; /* Correspond à la largeur du sidebar */
+  margin-left: 250px;
   position: relative;
   z-index: 1;
-  transition: margin-left 0.3s ease; /* Ajouter une transition pour le mouvement */
+  transition: margin-left 0.3s ease;
 }
 
 .dashboard-content.sidebar-closed {
-  margin-left: 0; /* Lorsque la barre latérale est fermée, le contenu prend toute la largeur */
+  margin-left: 0;
 }
 
 .content-container {
@@ -131,7 +133,6 @@ export default {
   border-radius: 15px;
 }
 
-/* Transitions pour le router-view */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -147,7 +148,6 @@ export default {
   transform: translateY(-20px);
 }
 
-/* Media Queries */
 @media (max-width: 1024px) {
   .dashboard-content {
     margin-left: 200px;
@@ -157,19 +157,16 @@ export default {
 
 @media (max-width: 768px) {
   .dashboard-content {
-    margin-left: 0; /* Sur mobile, le contenu est toujours à 0 margin-left */
+    margin-left: 0;
     padding: 15px;
   }
 
   .dashboard-content.sidebar-closed {
-    margin-left: 0; /* Assurez-vous que cela reste 0 sur mobile */
+    margin-left: 0;
   }
 
   .content-container {
     padding: 10px;
   }
-
-  /* Ces styles nécessiteraient un menu burger sur mobile */
-  /* qui affiche/masque le sidebar */
 }
 </style>

@@ -1,15 +1,6 @@
 <template>
   <header class="dashboard-header">
     <div class="header-left">
-      <button
-        @click="$emit('toggle-sidebar')"
-        class="hamburger-menu"
-        :class="{ 'is-active': isSidebarOpen }"
-      >
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </button>
       <h1 class="header-title">{{ pageTitle }}</h1>
       <div class="search-bar">
         <i class="fas fa-search"></i>
@@ -21,9 +12,10 @@
         <i class="fas fa-bell"></i>
         <span class="badge">3</span>
       </div>
-      <div class="user-avatar">
-        <img src="../../assets/images/logo-senelec.png" alt="Logo Senelec" />
-      </div>
+      <button @click="deconnecter" class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Déconnexion</span>
+      </button>
     </div>
   </header>
 </template>
@@ -36,12 +28,8 @@ export default {
       type: String,
       default: "Tableau de bord",
     },
-    isSidebarOpen: {
-      type: Boolean,
-      default: true,
-    },
   },
-  emits: ["toggle-sidebar"],
+  emits: ["logout"],
   data() {
     return {
       user: {
@@ -53,6 +41,15 @@ export default {
   computed: {
     userInitials() {
       return this.user.prenom.charAt(0) + this.user.nom.charAt(0);
+    },
+  },
+  methods: {
+    deconnecter() {
+      if (confirm("Êtes-vous sûr de vouloir vous déconnecter ?")) {
+        this.$emit("logout");
+        // Redirection vers la page de connexion
+        this.$router.push("/login");
+      }
     },
   },
 };
@@ -77,41 +74,6 @@ export default {
   display: flex;
   align-items: center;
   gap: 25px;
-}
-
-.hamburger-menu {
-  display: flex; /* Toujours visible */
-  flex-direction: column;
-  justify-content: space-around;
-  width: 30px;
-  height: 25px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  z-index: 10;
-}
-
-.hamburger-menu .bar {
-  width: 100%;
-  height: 3px;
-  background-color: #261555; /* Couleur du violet foncé de SENELEC */
-  border-radius: 10px;
-  transition: all 0.3s linear;
-  position: relative;
-  transform-origin: 1px;
-}
-
-.hamburger-menu.is-active .bar:nth-child(1) {
-  transform: rotate(45deg);
-}
-
-.hamburger-menu.is-active .bar:nth-child(2) {
-  opacity: 0;
-}
-
-.hamburger-menu.is-active .bar:nth-child(3) {
-  transform: rotate(-45deg);
 }
 
 .header-title {
@@ -235,6 +197,37 @@ export default {
   object-fit: cover;
 }
 
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #dc2626, #ef4444);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+}
+
+.logout-btn:hover {
+  background: linear-gradient(135deg, #b91c1c, #dc2626);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+}
+
+.logout-btn i {
+  font-size: 16px;
+}
+
+.logout-btn span {
+  font-size: 14px;
+  font-weight: 500;
+}
+
 @media (max-width: 992px) {
   .search-bar {
     width: 250px;
@@ -243,7 +236,7 @@ export default {
 
 @media (max-width: 768px) {
   .header-left {
-    gap: 15px; /* Réduire l'espacement lorsque le hamburger est visible */
+    gap: 20px;
   }
 
   .header-title {
@@ -269,9 +262,16 @@ export default {
     width: 150px;
   }
 
-  .header-right .notification,
-  .header-right .user-avatar {
-    display: none; /* Masquer les notifications et l'avatar sur très petits écrans */
+  .header-right .notification {
+    display: none; /* Masquer les notifications sur très petits écrans */
+  }
+
+  .logout-btn span {
+    display: none; /* Masquer le texte "Déconnexion" sur très petits écrans */
+  }
+
+  .logout-btn {
+    padding: 10px;
   }
 }
 </style>
