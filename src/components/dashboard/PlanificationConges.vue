@@ -436,6 +436,12 @@ export default {
       }
     },
   },
+  props: {
+    sidebarOpen: {
+      type: Boolean,
+      default: true,
+    },
+  },
 };
 </script>
 

@@ -365,6 +365,12 @@ export default {
       ] = signatureData;
     },
   },
+  props: {
+    sidebarOpen: {
+      type: Boolean,
+      default: true,
+    },
+  },
 };
 </script>
 

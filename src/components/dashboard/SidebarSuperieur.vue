@@ -1,7 +1,11 @@
 <template>
   <div class="sidebar" :class="{ 'is-open': isOpen }">
-    <button @click="$emit('toggle-sidebar')" class="sidebar-toggle">
-      <i class="fas fa-chevron-left" :class="{ rotated: !isOpen }"></i>
+    <button
+      v-if="isOpen"
+      @click="$emit('toggle-sidebar')"
+      class="sidebar-hamburger"
+    >
+      <i class="fas fa-bars"></i>
     </button>
     <div class="user-profile-section">
       <div class="logo-container">
@@ -313,7 +317,7 @@ export default {
 }
 
 .nav-item i {
-  color: #b10064;
+  color: #261555;
   margin-right: 15px;
   font-size: 24px;
   transition: color 0.3s ease;
@@ -342,7 +346,8 @@ export default {
   background: #261555;
 }
 
-.nav-item:hover i {
+.nav-item:hover i,
+.nav-item.active i {
   color: white;
 }
 
@@ -416,39 +421,6 @@ export default {
   }
 }
 
-.sidebar-toggle {
-  position: absolute;
-  top: 50px;
-  right: -15px;
-  width: 30px;
-  height: 30px;
-  background: var(--secondary-color);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 101;
-  transition: all 0.3s ease;
-  color: white;
-}
-
-.sidebar-toggle:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.sidebar-toggle i {
-  font-size: 14px;
-  transition: transform 0.3s ease;
-}
-
-.sidebar-toggle i.rotated {
-  transform: rotate(180deg);
-}
-
 .logout-btn-employe {
   width: 100%;
   padding: 10px 0;
@@ -463,5 +435,21 @@ export default {
 }
 .logout-btn-employe:hover {
   background-color: #005f6b;
+}
+
+.sidebar-hamburger {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 26px;
+  cursor: pointer;
+  z-index: 110;
+  transition: color 0.2s;
+}
+.sidebar-hamburger:hover {
+  color: #008a9b;
 }
 </style>

@@ -122,16 +122,13 @@ export default {
     navigateToComponent(type) {
       switch (type) {
         case "planification":
-          this.selectedComponent = "PlanificationConges";
-          this.$router.push({ query: { form: "planification" } });
+          this.$router.push({ name: "formulairePlanification" });
           break;
         case "report":
-          this.selectedComponent = "DemandeReport";
-          this.$router.push({ query: { form: "report" } });
+          this.$router.push({ name: "formulaireReport" });
           break;
         case "absence":
-          this.selectedComponent = "DemandeAbsence";
-          this.$router.push({ query: { form: "absence" } });
+          this.$router.push({ name: "formulaireAbsence" });
           break;
       }
     },
@@ -225,7 +222,7 @@ export default {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #008a9b 0%, #b10064 100%);
+  background: #261555;
   transform: scaleX(0);
   transition: transform 0.3s ease;
 }
@@ -248,7 +245,7 @@ export default {
 .card-icon {
   width: 60px;
   height: 60px;
-  background: linear-gradient(135deg, #008a9b 0%, #b10064 100%);
+  background: #261555;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -388,5 +385,3 @@ export default {
   }
 }
 </style>
-
-font-size: 20px;

@@ -9,7 +9,9 @@ import HistoriqueView from "../views/dashboard/HistoriqueView.vue";
 import DashboardHomeView from "../views/dashboard/DashboardHomeView.vue";
 import DemandesEnAttenteView from "../views/dashboard/DemandesEnAttenteView.vue";
 import ValidationDemandesView from "../views/dashboard/ValidationDemandesView.vue";
-// import RapportsValidationView from "../views/dashboard/RapportsValidationView.vue";
+import PlanificationConges from "../components/dashboard/PlanificationConges.vue";
+import DemandeReport from "../components/dashboard/DemandeReport.vue";
+import DemandeAbsence from "../components/dashboard/DemandeAbsence.vue";
 
 const routes = [
   {
@@ -55,6 +57,24 @@ const routes = [
         name: "historiqueConges",
         component: HistoriqueView,
         meta: { title: "Historique des congés" },
+      },
+      {
+        path: "demande-conges",
+        name: "formulairePlanification",
+        component: PlanificationConges,
+        meta: { title: "Demande de Congés" },
+      },
+      {
+        path: "demande-report",
+        name: "formulaireReport",
+        component: DemandeReport,
+        meta: { title: "Demande de Report de Congés" },
+      },
+      {
+        path: "demande-absence",
+        name: "formulaireAbsence",
+        component: DemandeAbsence,
+        meta: { title: "Demande d'Absence" },
       },
     ],
   },

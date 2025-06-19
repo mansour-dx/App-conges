@@ -1,7 +1,11 @@
 <template>
   <v-card height="64" flat class="dashboard-toolbar-card">
     <v-toolbar class="text-white dashboard-toolbar" :style="toolbarStyle">
-      <v-btn icon="mdi-menu" @click="$emit('toggle-sidebar')"></v-btn>
+      <v-btn
+        v-if="!sidebarOpen"
+        icon="mdi-menu"
+        @click="$emit('toggle-sidebar')"
+      ></v-btn>
       <v-toolbar-title class="text-center">{{ pageTitle }}</v-toolbar-title>
       <div class="toolbar-actions">
         <v-menu offset-y transition="fab-transition">
@@ -56,6 +60,10 @@ export default {
         },
       ],
     },
+    sidebarOpen: {
+      type: Boolean,
+      default: false,
+    },
   },
   emits: ["toggle-sidebar"],
   computed: {
@@ -79,6 +87,12 @@ export default {
 .dashboard-toolbar-card {
   border-radius: 0;
   box-shadow: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  z-index: 2000;
 }
 .dashboard-toolbar {
   min-height: 64px;
@@ -101,5 +115,8 @@ export default {
   text-align: center;
   font-weight: 600;
   font-size: 20px;
+}
+body {
+  padding-top: 64px;
 }
 </style>

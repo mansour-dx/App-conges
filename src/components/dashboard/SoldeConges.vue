@@ -307,7 +307,7 @@ export default {
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #008a9b 0%, #b10064 100%);
+  background: #261555;
   border-radius: 3px;
   transition: width 0.3s ease;
 }
@@ -352,7 +352,7 @@ export default {
 }
 
 .resume-item.primary {
-  background: linear-gradient(135deg, #261555 0%, #b10064 100%);
+  background: #261555;
   color: white;
 }
 

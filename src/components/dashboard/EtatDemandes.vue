@@ -248,7 +248,7 @@ export default {
 }
 
 .filter-group label i {
-  color: #008a9b;
+  color: #261555 !important;
   font-size: 14px;
 }
 
@@ -368,9 +368,9 @@ export default {
   width: 32px;
   height: 32px;
   border-radius: 6px;
-  background-color: #f5f5f5;
+  background-color: #261555;
   border: none;
-  color: #666;
+  color: #fff;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
@@ -378,9 +378,13 @@ export default {
   justify-content: center;
 }
 
+.btn-icon i {
+  color: #fff !important;
+}
+
 .btn-icon:hover {
   background-color: #008a9b;
-  color: white;
+  color: #fff;
 }
 
 .demande-info {
@@ -427,6 +431,7 @@ export default {
   font-size: 40px;
   margin-bottom: 15px;
   opacity: 0.5;
+  color: #261555 !important;
 }
 
 @media (max-width: 768px) {

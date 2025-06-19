@@ -249,7 +249,7 @@ export default {
 .stat-icon {
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, #008a9b 0%, #b10064 100%);
+  background: #261555;
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -258,8 +258,9 @@ export default {
 }
 
 .stat-icon i {
-  color: white;
-  font-size: 20px;
+  color: #fff;
+  font-size: 22px;
+  transition: color 0.2s;
 }
 
 .stat-content h3 {
@@ -457,7 +458,7 @@ export default {
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, #008a9b 0%, #b10064 100%);
+  background: #261555;
   transform: scaleX(0);
   transition: transform 0.3s ease;
 }
@@ -474,7 +475,7 @@ export default {
 .action-icon {
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, #008a9b 0%, #b10064 100%);
+  background: #261555;
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -483,8 +484,9 @@ export default {
 }
 
 .action-icon i {
-  color: white;
-  font-size: 20px;
+  color: #fff;
+  font-size: 22px;
+  transition: color 0.2s;
 }
 
 .action-content h3 {
