@@ -9,7 +9,7 @@ import HistoriqueView from "../views/dashboard/HistoriqueView.vue";
 import DashboardHomeView from "../views/dashboard/DashboardHomeView.vue";
 import DemandesEnAttenteView from "../views/dashboard/DemandesEnAttenteView.vue";
 import ValidationDemandesView from "../views/dashboard/ValidationDemandesView.vue";
-import RapportsValidationView from "../views/dashboard/RapportsValidationView.vue";
+// import RapportsValidationView from "../views/dashboard/RapportsValidationView.vue";
 
 const routes = [
   {
@@ -108,12 +108,6 @@ const routes = [
         name: "validationDemandes",
         component: ValidationDemandesView,
         meta: { title: "Validation des demandes" },
-      },
-      {
-        path: "rapports-validation",
-        name: "rapportsValidation",
-        component: RapportsValidationView,
-        meta: { title: "Rapports de validation" },
       },
     ],
   },

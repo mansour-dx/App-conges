@@ -89,6 +89,9 @@
         </router-link>
       </div>
     </nav>
+    <div style="padding: 16px; margin-top: auto">
+      <button class="logout-btn-employe" @click="logout">Déconnexion</button>
+    </div>
   </div>
 </template>
 
@@ -115,6 +118,12 @@ export default {
   computed: {
     userInitials() {
       return this.user.prenom.charAt(0) + this.user.nom.charAt(0);
+    },
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem("user");
+      this.$router.push("/");
     },
   },
 };
@@ -438,5 +447,21 @@ export default {
 
 .sidebar-toggle i.rotated {
   transform: rotate(180deg);
+}
+
+.logout-btn-employe {
+  width: 100%;
+  padding: 10px 0;
+  background-color: #008a9b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.logout-btn-employe:hover {
+  background-color: #005f6b;
 }
 </style>

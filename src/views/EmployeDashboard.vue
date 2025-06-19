@@ -6,8 +6,11 @@
       class="dashboard-content"
       :class="{ 'sidebar-closed': !isSidebarOpen }"
     >
-      <Header v-if="shouldShowHeader" :pageTitle="currentPageTitle" />
-
+      <DashboardToolbar
+        :page-title="currentPageTitle"
+        :notification-count="3"
+        @toggle-sidebar="toggleSidebar"
+      />
       <div class="content-container">
         <router-view v-slot="{ Component }">
           <transition name="fade" mode="out-in">
@@ -21,13 +24,13 @@
 
 <script>
 import SidebarEmploye from "@/components/dashboard/SidebarEmploye.vue";
-import Header from "@/components/dashboard/Header.vue";
+import DashboardToolbar from "@/components/dashboard/DashboardToolbar.vue";
 
 export default {
   name: "EmployeDashboard",
   components: {
     SidebarEmploye,
-    Header,
+    DashboardToolbar,
   },
   data() {
     return {
@@ -44,6 +47,8 @@ export default {
       // Obtenir le titre en fonction de la route actuelle
       const routePath = this.$route.path;
 
+      if (routePath.includes("/gestion-demandes"))
+        return "Gestion des demandes";
       if (routePath.includes("/planification"))
         return "Planification des congés";
       if (routePath.includes("/etat-demandes")) return "État des demandes";
