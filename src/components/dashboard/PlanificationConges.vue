@@ -264,16 +264,13 @@
         1 Dans les Unités opérationnelles et Délégations Régionales
       </div>
       <div class="actions-print">
-        <button type="button" @click="imprimerFiche" :disabled="!peutImprimer">
-          Imprimer
-        </button>
         <button
           type="button"
           class="btn-envoyer"
           @click="envoyerDemande"
           :disabled="demandeEnvoyee"
         >
-          Envoyer la demande
+          Soumettre
         </button>
       </div>
       <div v-if="confirmation" class="confirmation-message">

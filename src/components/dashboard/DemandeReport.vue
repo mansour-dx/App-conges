@@ -226,19 +226,11 @@
       <div class="actions-print">
         <button
           type="button"
-          @click="imprimerFiche"
-          :disabled="!peutImprimer"
-          class="btn-print"
-        >
-          Imprimer
-        </button>
-        <button
-          type="button"
+          class="btn-envoyer"
           @click="envoyerDemande"
           :disabled="demandeEnvoyee"
-          class="btn-send"
         >
-          Envoyer la demande
+          Soumettre
         </button>
       </div>
       <div v-if="demandeEnvoyee" class="confirmation-message">
