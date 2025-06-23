@@ -9,6 +9,7 @@
       <DashboardToolbar
         :page-title="currentPageTitle"
         :notification-count="3"
+        :sidebar-open="isSidebarOpen"
         @toggle-sidebar="toggleSidebar"
       />
       <div class="content-container">

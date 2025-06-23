@@ -68,10 +68,19 @@ export default {
   emits: ["toggle-sidebar"],
   computed: {
     toolbarStyle() {
-      return {
+      let style = {
         background: "linear-gradient(90deg, #008a9b 0%, #261555 100%)",
         height: "64px",
+        transition: "margin-left 0.3s ease, width 0.3s ease"
       };
+      if (this.sidebarOpen) {
+        style["marginLeft"] = "250px";
+        style["width"] = "calc(100vw - 250px)";
+      } else {
+        style["marginLeft"] = "0";
+        style["width"] = "100vw";
+      }
+      return style;
     },
   },
   methods: {
@@ -118,5 +127,15 @@ export default {
 }
 body {
   padding-top: 64px;
+}
+@media (max-width: 768px) {
+  .dashboard-toolbar-card {
+    left: 0 !important;
+    width: 100vw !important;
+  }
+  .dashboard-toolbar {
+    margin-left: 0 !important;
+    width: 100vw !important;
+  }
 }
 </style>
