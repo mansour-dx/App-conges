@@ -46,7 +46,7 @@
     <div class="section">
       <div class="section-header">
         <h2>Prochains Congés</h2>
-        <router-link to="/employe/historique" class="view-all-link">
+        <router-link :to="`${routePrefix}/historique`" class="view-all-link">
           Voir tout <i class="fas fa-arrow-right"></i>
         </router-link>
       </div>
@@ -89,7 +89,7 @@
     <div class="section">
       <h2>Actions Rapides</h2>
       <div class="actions-grid">
-        <router-link to="/employe/gestion-demandes" class="action-card">
+        <router-link :to="`${routePrefix}/gestion-demandes`" class="action-card">
           <div class="action-icon">
             <i class="fas fa-plus"></i>
           </div>
@@ -99,7 +99,7 @@
           </div>
         </router-link>
 
-        <router-link to="/employe/historique" class="action-card">
+        <router-link :to="`${routePrefix}/historique`" class="action-card">
           <div class="action-icon">
             <i class="fas fa-history"></i>
           </div>
@@ -109,7 +109,7 @@
           </div>
         </router-link>
 
-        <router-link to="/employe/solde" class="action-card">
+        <router-link :to="`${routePrefix}/solde`" class="action-card">
           <div class="action-icon">
             <i class="fas fa-calculator"></i>
           </div>
@@ -119,7 +119,7 @@
           </div>
         </router-link>
 
-        <router-link to="/employe/etat-demandes" class="action-card">
+        <router-link :to="`${routePrefix}/etat-demandes`" class="action-card">
           <div class="action-icon">
             <i class="fas fa-list-alt"></i>
           </div>
@@ -149,6 +149,9 @@ export default {
     prochainsConges() {
       return this.congesStore.prochainsConges;
     },
+    routePrefix() {
+      return this.$route.path.startsWith('/superieur') ? '/superieur' : '/employe';
+    }
   },
   methods: {
     formatDate(date) {
@@ -206,7 +209,7 @@ export default {
 }
 
 .dashboard-header p {
-  color: #6c757d;
+  color: #64748b;
   font-size: 1.1rem;
   margin: 0;
 }
@@ -219,38 +222,41 @@ export default {
 .stats-section h2 {
   color: #261555;
   font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0 0 1.5rem 0;
+  margin-bottom: 1.5rem;
 }
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
 }
 
 .stat-card {
   background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  padding: 2rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease;
 }
 
 .stat-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-color: #008a9b;
 }
 
 .stat-icon {
-  width: 50px;
-  height: 50px;
-  background: #261555;
-  border-radius: 10px;
+  width: 60px;
+  height: 60px;
+  background: #f0f9ff;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -258,30 +264,37 @@ export default {
 }
 
 .stat-icon i {
-  color: #fff;
-  font-size: 22px;
-  transition: color 0.2s;
+  font-size: 24px;
+  color: #008a9b;
+}
+
+.stat-content {
+  flex: 1;
 }
 
 .stat-content h3 {
-  color: #6c757d;
-  font-size: 0.9rem;
-  font-weight: 500;
+  color: #261555;
+  font-size: 1.25rem;
+  font-weight: 600;
   margin: 0 0 0.5rem 0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .stat-value {
-  color: #261555;
-  font-size: 1.75rem;
+  color: #008a9b;
+  font-size: 1.5rem;
   font-weight: 700;
   margin: 0;
 }
 
-/* Sections générales */
+/* Section */
 .section {
   margin-bottom: 3rem;
+}
+
+.section h2 {
+  color: #261555;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .section-header {
@@ -291,53 +304,38 @@ export default {
   margin-bottom: 1.5rem;
 }
 
-.section h2 {
-  color: #261555;
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0;
-}
-
 .view-all-link {
   color: #008a9b;
   text-decoration: none;
-  font-size: 0.9rem;
   font-weight: 500;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  transition: all 0.3s ease;
+  transition: color 0.3s ease;
 }
 
 .view-all-link:hover {
-  color: #b10064;
-  transform: translateX(4px);
+  color: #005f6b;
 }
 
 /* Liste des congés */
 .conges-list {
   background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
   overflow: hidden;
 }
 
 .conge-item {
-  padding: 1.25rem;
-  border-bottom: 1px solid #f1f5f9;
+  padding: 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: background-color 0.3s ease;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .conge-item:last-child {
   border-bottom: none;
-}
-
-.conge-item:hover {
-  background-color: #f8fafc;
 }
 
 .conge-info {
@@ -350,133 +348,110 @@ export default {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #261555;
+  color: #64748b;
+}
+
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
   font-weight: 500;
 }
 
-.conge-dates i {
-  color: #008a9b;
-  font-size: 14px;
-}
-
-/* Badges et statuts */
-.badge {
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
 .badge-annuel {
-  background-color: rgba(0, 138, 155, 0.1);
-  color: #008a9b;
-}
-
-.badge-maladie {
-  background-color: rgba(177, 0, 100, 0.1);
-  color: #b10064;
-}
-
-.badge-recup {
-  background-color: rgba(38, 21, 85, 0.1);
-  color: #261555;
+  background: #e0f2fe;
+  color: #0369a1;
 }
 
 .badge-fractionnes {
-  background-color: rgba(177, 0, 100, 0.1);
-  color: #b10064;
+  background: #fef3c7;
+  color: #92400e;
 }
 
 .badge-autres_legaux {
-  background-color: rgba(38, 21, 85, 0.1);
-  color: #261555;
+  background: #f3e8ff;
+  color: #6b21a8;
 }
 
-.badge-default {
-  background-color: #f1f5f9;
-  color: #6c757d;
+.badge-maladie {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.badge-recup {
+  background: #dcfce7;
+  color: #166534;
 }
 
 .status {
   padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 .status-pending {
-  background-color: rgba(177, 0, 100, 0.1);
-  color: #b10064;
+  background: #fef3c7;
+  color: #92400e;
 }
 
 .status-approved {
-  background-color: rgba(0, 138, 155, 0.1);
-  color: #008a9b;
+  background: #dcfce7;
+  color: #166534;
 }
 
 .status-rejected {
-  background-color: rgba(38, 21, 85, 0.1);
-  color: #261555;
+  background: #fee2e2;
+  color: #991b1b;
 }
 
-.status-default {
-  background-color: #f1f5f9;
-  color: #6c757d;
+.empty-state {
+  padding: 3rem;
+  text-align: center;
+  color: #64748b;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
 }
 
 /* Actions rapides */
 .actions-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
 }
 
 .action-card {
   background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e9ecef;
-  text-decoration: none;
-  color: inherit;
+  border-radius: 16px;
+  padding: 2rem;
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
+  cursor: pointer;
   transition: all 0.3s ease;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  text-decoration: none;
   position: relative;
-  overflow: hidden;
-}
-
-.action-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: #261555;
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
 }
 
 .action-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-}
-
-.action-card:hover::before {
-  transform: scaleX(1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-color: #008a9b;
 }
 
 .action-icon {
-  width: 50px;
-  height: 50px;
-  background: #261555;
-  border-radius: 10px;
+  width: 60px;
+  height: 60px;
+  background: #f0f9ff;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -484,58 +459,69 @@ export default {
 }
 
 .action-icon i {
-  color: #fff;
-  font-size: 22px;
-  transition: color 0.2s;
+  font-size: 24px;
+  color: #008a9b;
+}
+
+.action-content {
+  flex: 1;
 }
 
 .action-content h3 {
   color: #261555;
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  margin: 0 0 0.25rem 0;
+  margin: 0 0 0.5rem 0;
 }
 
 .action-content p {
-  color: #6c757d;
-  font-size: 0.9rem;
+  color: #64748b;
+  font-size: 0.95rem;
   margin: 0;
+  line-height: 1.5;
 }
 
-/* État vide */
-.empty-state {
-  padding: 3rem 2rem;
-  text-align: center;
-  color: #6c757d;
+/* Ajout de la flèche à droite comme dans GestionDemandesView */
+.action-card::after {
+  content: "\f054";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  color: #008a9b;
+  font-size: 1.25rem;
+  opacity: 0;
+  transition: all 0.3s ease;
+  position: absolute;
+  right: 2rem;
 }
 
-.empty-state i {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  opacity: 0.5;
+.action-card:hover::after {
+  opacity: 1;
+  transform: translateX(4px);
 }
 
-.empty-state p {
-  margin: 0;
-  font-size: 1rem;
-}
-
-/* Responsive */
 @media (max-width: 768px) {
   .dashboard-home {
     padding: 1rem;
+  }
+
+  .dashboard-header {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
   }
 
   .dashboard-header h1 {
     font-size: 2rem;
   }
 
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-
+  .stats-grid,
   .actions-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .stat-card,
+  .action-card {
+    padding: 1.5rem;
   }
 
   .conge-item {
@@ -544,24 +530,8 @@ export default {
     gap: 1rem;
   }
 
-  .section-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .dashboard-header h1 {
-    font-size: 1.75rem;
-  }
-
-  .stat-card {
-    padding: 1.25rem;
-  }
-
-  .action-card {
-    padding: 1.25rem;
+  .conge-status {
+    align-self: flex-start;
   }
 }
 </style>

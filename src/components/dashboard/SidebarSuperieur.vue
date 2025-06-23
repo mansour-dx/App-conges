@@ -28,7 +28,7 @@
     </div>
     <nav class="sidebar-nav">
       <router-link
-        to="/superieur/dashboard"
+        :to="{ name: 'superieurDashboard' }"
         class="nav-item"
         active-class="active"
       >
@@ -36,7 +36,7 @@
         <span>Dashboard</span>
       </router-link>
       <router-link
-        to="/superieur/gestion-demandes"
+        :to="{ name: 'superieurGestionDemandes' }"
         class="nav-item"
         active-class="active"
       >
@@ -44,7 +44,7 @@
         <span>Gestion des Demandes</span>
       </router-link>
       <router-link
-        to="/superieur/etat-demandes"
+        :to="{ name: 'superieurEtatDemandes' }"
         class="nav-item"
         active-class="active"
       >
@@ -52,7 +52,7 @@
         <span>État des demandes</span>
       </router-link>
       <router-link
-        to="/superieur/solde"
+        :to="{ name: 'superieurSoldeConges' }"
         class="nav-item"
         active-class="active"
       >
@@ -60,7 +60,7 @@
         <span>Solde de congés</span>
       </router-link>
       <router-link
-        to="/superieur/historique"
+        :to="{ name: 'superieurHistoriqueConges' }"
         class="nav-item"
         active-class="active"
       >
@@ -68,7 +68,7 @@
         <span>Historique</span>
       </router-link>
       <router-link
-        to="/superieur/demandes-en-attente"
+        :to="{ name: 'demandesEnAttente' }"
         class="nav-item"
         active-class="active"
       >
@@ -76,7 +76,7 @@
         <span>Liste des demandes</span>
       </router-link>
       <router-link
-        to="/superieur/validation-demandes"
+        :to="{ name: 'validationDemandes' }"
         class="nav-item"
         active-class="active"
       >

@@ -1,8 +1,8 @@
 <template>
   <div class="gestion-demandes">
-    <div class="content-wrapper" :class="{ 'form-active': selectedComponent }">
+    <div class="content-wrapper">
       <!-- Section des cartes -->
-      <div class="cards-section" v-show="!selectedComponent">
+      <div class="cards-section">
         <div class="page-header">
           <h1>Gestion des Demandes</h1>
           <p>Sélectionnez le type de demande que vous souhaitez effectuer</p>
@@ -57,104 +57,49 @@
           </div>
         </div>
       </div>
-
-      <!-- Section du formulaire -->
-      <div class="form-section" v-if="selectedComponent">
-        <div class="form-header">
-          <button class="back-btn" @click="closeForm">
-            <i class="fas fa-arrow-left"></i>
-            <span>Retour</span>
-          </button>
-          <h2>{{ getFormTitle }}</h2>
-        </div>
-
-        <div class="form-content">
-          <component :is="selectedComponent" @close="closeForm" />
-        </div>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
-import PlanificationConges from "@/components/dashboard/PlanificationConges.vue";
-import DemandeReport from "@/components/dashboard/DemandeReport.vue";
-import DemandeAbsence from "@/components/dashboard/DemandeAbsence.vue";
-
 export default {
   name: "GestionDemandesView",
-  components: {
-    PlanificationConges,
-    DemandeReport,
-    DemandeAbsence,
-  },
-  data() {
-    return {
-      selectedComponent: null,
-    };
-  },
-  created() {
-    if (this.$route.query.from === "dashboard") {
-      this.selectedComponent = "PlanificationConges";
-    }
-    this.checkUrlForForm();
-  },
-  watch: {
-    "$route.query.form"(newForm) {
-      this.checkUrlForForm();
-    },
-  },
   computed: {
-    getFormTitle() {
-      switch (this.selectedComponent) {
-        case "PlanificationConges":
-          return "Demande de Congés";
-        case "DemandeReport":
-          return "Demande de Report de Congés";
-        case "DemandeAbsence":
-          return "Demande d'Absence";
-        default:
-          return "";
-      }
-    },
+    isSuperieurDashboard() {
+      return this.$route.path.startsWith('/superieur');
+    }
   },
   methods: {
     navigateToComponent(type) {
-      switch (type) {
-        case "planification":
-          this.$router.push({ name: "formulairePlanification" });
-          break;
-        case "report":
-          this.$router.push({ name: "formulaireReport" });
-          break;
-        case "absence":
-          this.$router.push({ name: "formulaireAbsence" });
-          break;
-      }
-    },
-    closeForm() {
-      this.selectedComponent = null;
-      this.$router.push({ query: {} });
-    },
-    checkUrlForForm() {
-      const formType = this.$route.query.form;
-      if (formType) {
-        switch (formType) {
+      if (this.isSuperieurDashboard) {
+        // Dans le dashboard supérieur, on utilise aussi la navigation
+        switch (type) {
           case "planification":
-            this.selectedComponent = "PlanificationConges";
+            this.$router.push({ name: "superieurFormulairePlanification" });
             break;
           case "report":
-            this.selectedComponent = "DemandeReport";
+            this.$router.push({ name: "superieurFormulaireReport" });
             break;
           case "absence":
-            this.selectedComponent = "DemandeAbsence";
+            this.$router.push({ name: "superieurFormulaireAbsence" });
             break;
         }
       } else {
-        this.selectedComponent = null;
+        // Dans le dashboard employé, on utilise la navigation
+        switch (type) {
+          case "planification":
+            this.$router.push({ name: "formulairePlanification" });
+            break;
+          case "report":
+            this.$router.push({ name: "formulaireReport" });
+            break;
+          case "absence":
+            this.$router.push({ name: "formulaireAbsence" });
+            break;
+        }
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -162,13 +107,14 @@ export default {
 .gestion-demandes {
   min-height: 100vh;
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  padding: 2rem;
   font-family: "Inter", sans-serif;
+  position: relative;
 }
 
 .content-wrapper {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 2rem;
 }
 
 /* Page Header */
@@ -189,7 +135,7 @@ export default {
 }
 
 .page-header p {
-  color: #6c757d;
+  color: #64748b;
   font-size: 1.1rem;
   margin: 0;
 }
@@ -197,9 +143,9 @@ export default {
 /* Cards Grid */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
-  margin-bottom: 2rem;
+  padding: 1rem;
 }
 
 /* Demand Card */
@@ -207,141 +153,77 @@ export default {
   background: white;
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e9ecef;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.demand-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: #261555;
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .demand-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-color: #008a9b;
 }
 
-.demand-card:hover::before {
-  transform: scaleX(1);
-}
-
-.demand-card:hover .card-arrow {
-  transform: translateX(8px);
-  color: #008a9b;
-}
-
-/* Card Icon */
 .card-icon {
   width: 60px;
   height: 60px;
-  background: #261555;
+  background: #f0f9ff;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.5rem;
+  flex-shrink: 0;
 }
 
 .card-icon i {
-  color: white;
   font-size: 24px;
+  color: #008a9b;
 }
 
-/* Card Content */
+.card-content {
+  flex: 1;
+}
+
 .card-content h3 {
   color: #261555;
   font-size: 1.25rem;
   font-weight: 600;
-  margin: 0 0 0.75rem 0;
+  margin: 0 0 0.5rem 0;
 }
 
 .card-content p {
-  color: #6c757d;
+  color: #64748b;
   font-size: 0.95rem;
+  margin: 0;
   line-height: 1.5;
-  margin: 0;
 }
 
-/* Card Arrow */
 .card-arrow {
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
-  color: #cbd5e1;
+  color: #008a9b;
   font-size: 1.25rem;
-  transition: all 0.3s ease;
-}
-
-/* Form Section */
-.form-section {
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-}
-
-/* Form Header */
-.form-header {
-  background: linear-gradient(135deg, #261555 0%, #b10064 100%);
-  color: white;
-  padding: 1.5rem 2rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.back-btn {
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  color: white;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-}
-
-.back-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.form-header h2 {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
-}
-
-/* Form Content */
-.form-content {
-  padding: 2rem;
-}
-
-/* Animations */
-.form-active .cards-section {
   opacity: 0;
-  pointer-events: none;
-  transform: translateY(-20px);
   transition: all 0.3s ease;
 }
 
-/* Responsive */
+.demand-card:hover .card-arrow {
+  opacity: 1;
+  transform: translateX(4px);
+}
+
 @media (max-width: 768px) {
-  .gestion-demandes {
+  .content-wrapper {
     padding: 1rem;
+  }
+
+  .page-header {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
   }
 
   .page-header h1 {
@@ -350,38 +232,11 @@ export default {
 
   .cards-grid {
     grid-template-columns: 1fr;
-    gap: 1.5rem;
+    gap: 1rem;
   }
 
   .demand-card {
     padding: 1.5rem;
-  }
-
-  .form-header {
-    padding: 1rem 1.5rem;
-  }
-
-  .form-content {
-    padding: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .page-header h1 {
-    font-size: 1.75rem;
-  }
-
-  .demand-card {
-    padding: 1.25rem;
-  }
-
-  .card-icon {
-    width: 50px;
-    height: 50px;
-  }
-
-  .card-icon i {
-    font-size: 20px;
   }
 }
 </style>

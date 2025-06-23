@@ -129,6 +129,24 @@ const routes = [
         component: ValidationDemandesView,
         meta: { title: "Validation des demandes" },
       },
+      {
+        path: "demande-conges",
+        name: "superieurFormulairePlanification",
+        component: PlanificationConges,
+        meta: { title: "Demande de Congés - Supérieur" },
+      },
+      {
+        path: "demande-report",
+        name: "superieurFormulaireReport",
+        component: DemandeReport,
+        meta: { title: "Demande de Report de Congés - Supérieur" },
+      },
+      {
+        path: "demande-absence",
+        name: "superieurFormulaireAbsence",
+        component: DemandeAbsence,
+        meta: { title: "Demande d'Absence - Supérieur" },
+      },
     ],
   },
   {
