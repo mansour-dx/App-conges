@@ -26,13 +26,34 @@ export default {
 
 body,
 html {
-  font-family: "Roboto", Arial, sans-serif;
+  font-family: "Inter", "Roboto", Arial, sans-serif;
+  font-size: 15px;
   height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
   background-color: #f5f5f5;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+h4, .card-title {
+  font-size: 1rem;
+  font-weight: 500;
+}
+.small, .label, .card-content p, .sidebar .user-function {
+  font-size: 0.9rem;
 }
 
 #app {

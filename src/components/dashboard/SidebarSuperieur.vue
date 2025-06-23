@@ -27,71 +27,62 @@
       </div>
     </div>
     <nav class="sidebar-nav">
-      <!-- Menu principal (comme employé) -->
-      <div class="nav-section">
-        <h3 class="nav-section-title">Mon Espace</h3>
-        <router-link
-          to="/superieur/dashboard"
-          class="nav-item"
-          active-class="active"
-        >
-          <i class="fas fa-tachometer-alt"></i>
-          <span>Dashboard</span>
-        </router-link>
-        <router-link
-          to="/superieur/gestion-demandes"
-          class="nav-item"
-          active-class="active"
-        >
-          <i class="fas fa-tasks"></i>
-          <span>Gestion des Demandes</span>
-        </router-link>
-        <router-link
-          to="/superieur/etat-demandes"
-          class="nav-item"
-          active-class="active"
-        >
-          <i class="fas fa-list-check"></i>
-          <span>État des demandes</span>
-        </router-link>
-        <router-link
-          to="/superieur/solde"
-          class="nav-item"
-          active-class="active"
-        >
-          <i class="fas fa-wallet"></i>
-          <span>Solde de congés</span>
-        </router-link>
-        <router-link
-          to="/superieur/historique"
-          class="nav-item"
-          active-class="active"
-        >
-          <i class="fas fa-history"></i>
-          <span>Historique</span>
-        </router-link>
-      </div>
-
-      <!-- Menu spécifique au supérieur hiérarchique -->
-      <div class="nav-section">
-        <h3 class="nav-section-title">Validation</h3>
-        <router-link
-          to="/superieur/demandes-en-attente"
-          class="nav-item"
-          active-class="active"
-        >
-          <i class="fas fa-list"></i>
-          <span>Liste des demandes</span>
-        </router-link>
-        <router-link
-          to="/superieur/validation-demandes"
-          class="nav-item"
-          active-class="active"
-        >
-          <i class="fas fa-check-circle"></i>
-          <span>Validation des demandes</span>
-        </router-link>
-      </div>
+      <router-link
+        to="/superieur/dashboard"
+        class="nav-item"
+        active-class="active"
+      >
+        <i class="fas fa-tachometer-alt"></i>
+        <span>Dashboard</span>
+      </router-link>
+      <router-link
+        to="/superieur/gestion-demandes"
+        class="nav-item"
+        active-class="active"
+      >
+        <i class="fas fa-tasks"></i>
+        <span>Gestion des Demandes</span>
+      </router-link>
+      <router-link
+        to="/superieur/etat-demandes"
+        class="nav-item"
+        active-class="active"
+      >
+        <i class="fas fa-list-check"></i>
+        <span>État des demandes</span>
+      </router-link>
+      <router-link
+        to="/superieur/solde"
+        class="nav-item"
+        active-class="active"
+      >
+        <i class="fas fa-wallet"></i>
+        <span>Solde de congés</span>
+      </router-link>
+      <router-link
+        to="/superieur/historique"
+        class="nav-item"
+        active-class="active"
+      >
+        <i class="fas fa-history"></i>
+        <span>Historique</span>
+      </router-link>
+      <router-link
+        to="/superieur/demandes-en-attente"
+        class="nav-item"
+        active-class="active"
+      >
+        <i class="fas fa-list"></i>
+        <span>Liste des demandes</span>
+      </router-link>
+      <router-link
+        to="/superieur/validation-demandes"
+        class="nav-item"
+        active-class="active"
+      >
+        <i class="fas fa-check-circle"></i>
+        <span>Validation des demandes</span>
+      </router-link>
     </nav>
     <div style="padding: 16px; margin-top: auto">
       <button class="logout-btn-employe" @click="logout">Déconnexion</button>
@@ -286,21 +277,6 @@ export default {
 
 .sidebar-nav::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.5);
-}
-
-.nav-section {
-  display: flex;
-  flex-direction: column;
-}
-
-.nav-section-title {
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.6);
-  margin-bottom: 10px;
-  padding-left: 15px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .nav-item {
