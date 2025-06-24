@@ -46,19 +46,39 @@ export default {
   methods: {
     login() {
       // Simulation d'une connexion réussie
+      // Note: Dans une vraie application, ceci viendrait de votre API
       const userData = {
         id: 1,
         username: this.username,
         nom: "Diallo",
         prenom: "Amadou",
         fonction: "Ingénieur Électricien",
+        role: this.determineUserRole(this.username)
       };
 
       // Stockage des données utilisateur
       localStorage.setItem("user", JSON.stringify(userData));
 
-      // Redirection vers le dashboard
-      this.$router.push("/employe/dashboard");
+      // Redirection vers le dashboard approprié
+      const dashboardRoutes = {
+        'employe': '/employe/dashboard',
+        'superieur': '/superieur/dashboard',
+        'directeurUnite': '/directeur-unite/dashboard',
+        'responsableRH': '/responsable-rh/dashboard',
+        'directeurRH': '/directeur-rh/dashboard'
+      };
+
+      this.$router.push(dashboardRoutes[userData.role] || '/employe/dashboard');
+    },
+
+    determineUserRole(username) {
+      // Simulation de la détermination du rôle basée sur le nom d'utilisateur
+      // Dans une vraie application, ceci viendrait de votre API
+      if (username.toLowerCase().includes('sup')) return 'superieur';
+      if (username.toLowerCase().includes('dir')) return 'directeurUnite';
+      if (username.toLowerCase().includes('rh')) return 'responsableRH';
+      if (username.toLowerCase().includes('drh')) return 'directeurRH';
+      return 'employe';
     },
     forgotPassword() {
       // Logique pour réinitialiser le mot de passe

@@ -21,14 +21,14 @@
           <span class="user-function">{{ user.fonction }}</span>
           <div class="user-role-container">
             <div class="connection-indicator"></div>
-            <span class="user-role">Supérieur Hiérarchique</span>
+            <span class="user-role">{{ role }}</span>
           </div>
         </div>
       </div>
     </div>
     <nav class="sidebar-nav">
       <router-link
-        :to="{ name: 'superieurDashboard' }"
+        :to="{ name: `${rolePrefix}Dashboard` }"
         class="nav-item"
         active-class="active"
       >
@@ -36,7 +36,7 @@
         <span>Dashboard</span>
       </router-link>
       <router-link
-        :to="{ name: 'superieurGestionDemandes' }"
+        :to="{ name: `${rolePrefix}GestionDemandes` }"
         class="nav-item"
         active-class="active"
       >
@@ -44,31 +44,8 @@
         <span>Gestion des Demandes</span>
       </router-link>
       <router-link
-        :to="{ name: 'superieurEtatDemandes' }"
-        class="nav-item"
-        active-class="active"
-      >
-        <i class="fas fa-list-check"></i>
-        <span>État des demandes</span>
-      </router-link>
-      <router-link
-        :to="{ name: 'superieurSoldeConges' }"
-        class="nav-item"
-        active-class="active"
-      >
-        <i class="fas fa-wallet"></i>
-        <span>Solde de congés</span>
-      </router-link>
-      <router-link
-        :to="{ name: 'superieurHistoriqueConges' }"
-        class="nav-item"
-        active-class="active"
-      >
-        <i class="fas fa-history"></i>
-        <span>Historique</span>
-      </router-link>
-      <router-link
-        :to="{ name: 'demandesEnAttente' }"
+        v-if="role !== 'Employé'"
+        :to="{ name: `${rolePrefix}DemandesEnAttente` }"
         class="nav-item"
         active-class="active"
       >
@@ -76,12 +53,46 @@
         <span>Liste des demandes</span>
       </router-link>
       <router-link
-        :to="{ name: 'validationDemandes' }"
+        v-if="role !== 'Employé'"
+        :to="{ name: `${rolePrefix}ValidationDemandes` }"
         class="nav-item"
         active-class="active"
       >
         <i class="fas fa-check-circle"></i>
         <span>Validation des demandes</span>
+      </router-link>
+      <router-link
+        :to="{ name: `${rolePrefix}EtatDemandes` }"
+        class="nav-item"
+        active-class="active"
+      >
+        <i class="fas fa-list-check"></i>
+        <span>État des demandes</span>
+      </router-link>
+      <router-link
+        :to="{ name: `${rolePrefix}SoldeConges` }"
+        class="nav-item"
+        active-class="active"
+      >
+        <i class="fas fa-wallet"></i>
+        <span>Solde de congés</span>
+      </router-link>
+      <router-link
+        :to="{ name: `${rolePrefix}HistoriqueConges` }"
+        class="nav-item"
+        active-class="active"
+      >
+        <i class="fas fa-history"></i>
+        <span>Historique</span>
+      </router-link>
+      <router-link
+        v-if="role === 'Directeur RH'"
+        :to="{ name: 'directeurRHDocumentsAdministratifs' }"
+        class="nav-item"
+        active-class="active"
+      >
+        <i class="fas fa-file-contract"></i>
+        <span>Documents Administratifs</span>
       </router-link>
     </nav>
     <div style="padding: 16px; margin-top: auto">
@@ -98,6 +109,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    role: {
+      type: String,
+      default: "Supérieur Hiérarchique"
+    }
   },
   emits: ["toggle-sidebar"],
   data() {
@@ -114,6 +129,18 @@ export default {
     userInitials() {
       return this.user.prenom.charAt(0) + this.user.nom.charAt(0);
     },
+    rolePrefix() {
+      switch (this.role) {
+        case "Directeur d'Unité":
+          return "directeurUnite";
+        case "Responsable RH":
+          return "responsableRH";
+        case "Directeur RH":
+          return "directeurRH";
+        default:
+          return "superieur";
+      }
+    }
   },
   methods: {
     logout() {
@@ -252,83 +279,65 @@ export default {
 }
 
 .sidebar-nav {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 15px 15px;
-  gap: 20px;
+  padding: 20px 0;
+  flex-grow: 1;
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-}
-
-.sidebar-nav::-webkit-scrollbar {
-  width: 6px;
-}
-
-.sidebar-nav::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.sidebar-nav::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 3px;
-}
-
-.sidebar-nav::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.5);
 }
 
 .nav-item {
   display: flex;
-  align-items: center;
-  padding: 12px 30px;
-  border-radius: 12px;
-  color: rgba(255, 255, 255, 0.9);
+  align-items: flex-start;
+  padding: 12px 20px;
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
-  margin-bottom: 8px;
   transition: all 0.3s ease;
   position: relative;
-  overflow: hidden;
+  margin: 4px 8px;
+  border-radius: 8px;
+  min-height: 48px;
 }
 
 .nav-item i {
-  color: #261555;
-  margin-right: 15px;
-  font-size: 24px;
-  transition: color 0.3s ease;
+  width: 24px;
+  margin-right: 12px;
+  font-size: 18px;
+  margin-top: 2px;
+  flex-shrink: 0;
 }
 
 .nav-item span {
-  font-size: 16px;
-  font-weight: 500;
+  flex: 1;
+  line-height: 1.4;
+  font-size: 14px;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
-.nav-item::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
-  z-index: -1;
-}
-
-.nav-item:hover::before {
-  transform: translateX(0);
-  background: #261555;
-}
-
-.nav-item:hover i,
-.nav-item.active i {
+.nav-item:hover {
   color: white;
+  background-color: rgba(38, 21, 85, 0.8); /* Couleur mauve SENELEC */
 }
 
 .nav-item.active {
-  background: rgba(0, 138, 155, 0.25);
+  color: white;
+  background-color: #261555; /* Couleur mauve SENELEC */
+  font-weight: 600;
+}
+
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: white;
+  border-radius: 0 4px 4px 0;
+}
+
+/* Ajustement pour les icônes quand le texte est sur deux lignes */
+.nav-item.active i,
+.nav-item:hover i {
   color: white;
 }
 

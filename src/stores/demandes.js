@@ -102,6 +102,18 @@ export const useDemandesStore = defineStore("demandes", {
     demandesRejetees: (state) =>
       state.demandes.filter((d) => d.status === "rejetee"),
 
+    // Demandes validées par le Directeur RH
+    demandesValideesDRH: (state) =>
+      state.demandes.filter(
+        (d) => d.status === "approuvee" && d.validePar && d.validePar.includes("Directeur RH")
+      ),
+
+    // Demandes en attente de validation DRH
+    demandesEnAttenteDRH: (state) =>
+      state.demandes.filter(
+        (d) => d.status === "en_attente" && (!d.validePar || !d.validePar.includes("Directeur RH"))
+      ),
+
     // Statistiques
     totalDemandes: (state) => state.demandes.length,
     nombreEnAttente: (state) =>
@@ -182,17 +194,53 @@ export const useDemandesStore = defineStore("demandes", {
     ajouterDemande(demande) {
       const nouvelleDemande = {
         ...demande,
-        id: Date.now(), // Générer un ID unique
+        id: Date.now(),
         status: "en_attente",
         dateDemande: new Date().toISOString().split("T")[0],
         commentaireValidation: null,
         dateValidation: null,
         validePar: null,
+        validationDRH: false,
+        dateValidationDRH: null,
+        commentaireDRH: null,
+        documentGenere: false,
+        dateGenerationDocument: null,
+        typeDocument: null,
       };
       this.demandes.push(nouvelleDemande);
     },
 
-    // Valider une demande (approuver ou rejeter)
+    // Valider une demande par le Directeur RH
+    validerDemandeDRH(demandeId, action, commentaire) {
+      const demande = this.demandes.find((d) => d.id === demandeId);
+      if (demande) {
+        demande.status = action === "approve" ? "approuvee" : "rejetee";
+        demande.dateValidationDRH = new Date().toISOString().split("T")[0];
+        demande.commentaireDRH = commentaire;
+        demande.validePar = "Directeur RH";
+        demande.validationDRH = true;
+      }
+    },
+
+    // Générer un document administratif
+    genererDocument(demandeId, typeDocument) {
+      const demande = this.demandes.find((d) => d.id === demandeId);
+      if (demande && demande.status === "approuvee") {
+        demande.documentGenere = true;
+        demande.dateGenerationDocument = new Date().toISOString().split("T")[0];
+        demande.typeDocument = typeDocument;
+        return {
+          id: Date.now(),
+          typeDocument,
+          dateGeneration: demande.dateGenerationDocument,
+          demande: { ...demande },
+          statut: "généré",
+        };
+      }
+      return null;
+    },
+
+    // Valider une demande
     validerDemande(demandeId, action, commentaire, validePar) {
       const demande = this.demandes.find((d) => d.id === demandeId);
       if (demande) {
@@ -205,9 +253,9 @@ export const useDemandesStore = defineStore("demandes", {
 
     // Mettre à jour une demande
     mettreAJourDemande(demandeId, modifications) {
-      const index = this.demandes.findIndex((d) => d.id === demandeId);
-      if (index !== -1) {
-        this.demandes[index] = { ...this.demandes[index], ...modifications };
+      const demande = this.demandes.find((d) => d.id === demandeId);
+      if (demande) {
+        Object.assign(demande, modifications);
       }
     },
 
@@ -221,73 +269,64 @@ export const useDemandesStore = defineStore("demandes", {
 
     // Rechercher des demandes
     rechercherDemandes(terme) {
-      const termeLower = terme.toLowerCase();
+      if (!terme) return this.demandes;
+      terme = terme.toLowerCase();
       return this.demandes.filter(
         (d) =>
-          d.nom.toLowerCase().includes(termeLower) ||
-          d.prenom.toLowerCase().includes(termeLower) ||
-          d.matricule.toLowerCase().includes(termeLower) ||
-          d.unite.toLowerCase().includes(termeLower) ||
-          d.typeDemande.toLowerCase().includes(termeLower)
+          d.prenom.toLowerCase().includes(terme) ||
+          d.nom.toLowerCase().includes(terme) ||
+          d.matricule.toLowerCase().includes(terme) ||
+          d.unite.toLowerCase().includes(terme) ||
+          d.typeDemande.toLowerCase().includes(terme)
       );
     },
 
-    // Filtrer les demandes par statut
+    // Filtrer par statut
     filtrerParStatut(statut) {
-      if (statut === "toutes") {
-        return this.demandes;
-      }
+      if (!statut) return this.demandes;
       return this.demandes.filter((d) => d.status === statut);
     },
 
     // Obtenir les statistiques mensuelles
     getStatistiquesMensuelles() {
-      const stats = {};
-      this.demandes.forEach((demande) => {
-        const mois = new Date(demande.dateDemande).toLocaleDateString("fr-FR", {
-          month: "short",
-        });
-        if (!stats[mois]) {
-          stats[mois] = { approuvees: 0, rejetees: 0, enAttente: 0 };
-        }
-        if (demande.status === "approuvee") {
-          stats[mois].approuvees++;
-        } else if (demande.status === "rejetee") {
-          stats[mois].rejetees++;
-        } else {
-          stats[mois].enAttente++;
-        }
-      });
-      return stats;
+      const maintenant = new Date();
+      const debutMois = new Date(maintenant.getFullYear(), maintenant.getMonth(), 1);
+      const demandesMois = this.demandes.filter(
+        (d) => new Date(d.dateDemande) >= debutMois
+      );
+
+      return {
+        total: demandesMois.length,
+        approuvees: demandesMois.filter((d) => d.status === "approuvee").length,
+        rejetees: demandesMois.filter((d) => d.status === "rejetee").length,
+        enAttente: demandesMois.filter((d) => d.status === "en_attente").length,
+      };
     },
 
-    // Charger les demandes depuis une API (simulation)
+    // Charger les demandes
     async chargerDemandes() {
-      this.loading = true;
-      this.error = null;
-
       try {
+        this.loading = true;
         // Simulation d'un appel API
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        // Ici on ferait un vrai appel API
-        // this.demandes = await api.getDemandes();
+        // Dans une vraie application, vous feriez un appel API ici
         this.loading = false;
       } catch (error) {
-        this.error = "Erreur lors du chargement des demandes";
+        this.error = error.message;
         this.loading = false;
       }
     },
 
-    // Sauvegarder les modifications (simulation)
+    // Sauvegarder les modifications
     async sauvegarderModifications() {
-      this.loading = true;
       try {
+        this.loading = true;
         // Simulation d'un appel API
-        await new Promise((resolve) => setTimeout(resolve, 500));
-        // Ici on ferait un vrai appel API pour sauvegarder
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // Dans une vraie application, vous feriez un appel API ici
         this.loading = false;
       } catch (error) {
-        this.error = "Erreur lors de la sauvegarde";
+        this.error = error.message;
         this.loading = false;
       }
     },

@@ -2,6 +2,9 @@ import { createRouter, createWebHistory } from "vue-router";
 import LoginView from "../views/LoginView.vue";
 import EmployeDashboard from "../views/EmployeDashboard.vue";
 import SuperieurDashboard from "../views/SuperieurDashboard.vue";
+import DirecteurUniteDashboard from "../views/DirecteurUniteDashboard.vue";
+import ResponsableRHDashboard from "../views/ResponsableRHDashboard.vue";
+import DirecteurRHDashboard from "../views/DirecteurRHDashboard.vue";
 import GestionDemandesView from "../views/dashboard/GestionDemandesView.vue";
 import EtatDemandesView from "../views/dashboard/EtatDemandesView.vue";
 import SoldeView from "../views/dashboard/SoldeView.vue";
@@ -9,9 +12,10 @@ import HistoriqueView from "../views/dashboard/HistoriqueView.vue";
 import DashboardHomeView from "../views/dashboard/DashboardHomeView.vue";
 import DemandesEnAttenteView from "../views/dashboard/DemandesEnAttenteView.vue";
 import ValidationDemandesView from "../views/dashboard/ValidationDemandesView.vue";
-import PlanificationConges from "../components/dashboard/PlanificationConges.vue";
-import DemandeReport from "../components/dashboard/DemandeReport.vue";
-import DemandeAbsence from "../components/dashboard/DemandeAbsence.vue";
+import DocumentsAdministratifsView from "../views/dashboard/DocumentsAdministratifsView.vue";
+import FormulairePlanificationView from "../views/dashboard/FormulairePlanificationView.vue";
+import FormulaireReportView from "../views/dashboard/FormulaireReportView.vue";
+import FormulaireAbsenceView from "../views/dashboard/FormulaireAbsenceView.vue";
 
 const routes = [
   {
@@ -22,7 +26,6 @@ const routes = [
   {
     path: "/employe",
     component: EmployeDashboard,
-    meta: { requiresAuth: true },
     children: [
       {
         path: "",
@@ -61,19 +64,19 @@ const routes = [
       {
         path: "demande-conges",
         name: "formulairePlanification",
-        component: PlanificationConges,
+        component: FormulairePlanificationView,
         meta: { title: "Demande de Congés" },
       },
       {
         path: "demande-report",
         name: "formulaireReport",
-        component: DemandeReport,
+        component: FormulaireReportView,
         meta: { title: "Demande de Report de Congés" },
       },
       {
         path: "demande-absence",
         name: "formulaireAbsence",
-        component: DemandeAbsence,
+        component: FormulaireAbsenceView,
         meta: { title: "Demande d'Absence" },
       },
     ],
@@ -81,7 +84,6 @@ const routes = [
   {
     path: "/superieur",
     component: SuperieurDashboard,
-    meta: { requiresAuth: true },
     children: [
       {
         path: "",
@@ -119,33 +121,249 @@ const routes = [
       },
       {
         path: "demandes-en-attente",
-        name: "demandesEnAttente",
+        name: "superieurDemandesEnAttente",
         component: DemandesEnAttenteView,
-        meta: { title: "Demandes en attente" },
+        meta: { title: "Demandes en attente - Supérieur" },
       },
       {
         path: "validation-demandes",
-        name: "validationDemandes",
+        name: "superieurValidationDemandes",
         component: ValidationDemandesView,
-        meta: { title: "Validation des demandes" },
+        meta: { title: "Validation des demandes - Supérieur" },
       },
       {
         path: "demande-conges",
         name: "superieurFormulairePlanification",
-        component: PlanificationConges,
+        component: FormulairePlanificationView,
         meta: { title: "Demande de Congés - Supérieur" },
       },
       {
         path: "demande-report",
         name: "superieurFormulaireReport",
-        component: DemandeReport,
+        component: FormulaireReportView,
         meta: { title: "Demande de Report de Congés - Supérieur" },
       },
       {
         path: "demande-absence",
         name: "superieurFormulaireAbsence",
-        component: DemandeAbsence,
+        component: FormulaireAbsenceView,
         meta: { title: "Demande d'Absence - Supérieur" },
+      },
+    ],
+  },
+  {
+    path: "/directeur-unite",
+    component: DirecteurUniteDashboard,
+    children: [
+      {
+        path: "",
+        redirect: { name: "directeurUniteDashboard" },
+      },
+      {
+        path: "dashboard",
+        name: "directeurUniteDashboard",
+        component: DashboardHomeView,
+        meta: { title: "Tableau de bord - Directeur d'Unité" },
+      },
+      {
+        path: "gestion-demandes",
+        name: "directeurUniteGestionDemandes",
+        component: GestionDemandesView,
+        meta: { title: "Gestion des Demandes - Directeur d'Unité" },
+      },
+      {
+        path: "etat-demandes",
+        name: "directeurUniteEtatDemandes",
+        component: EtatDemandesView,
+        meta: { title: "État des demandes - Directeur d'Unité" },
+      },
+      {
+        path: "solde",
+        name: "directeurUniteSoldeConges",
+        component: SoldeView,
+        meta: { title: "Solde de congés - Directeur d'Unité" },
+      },
+      {
+        path: "historique",
+        name: "directeurUniteHistoriqueConges",
+        component: HistoriqueView,
+        meta: { title: "Historique des congés - Directeur d'Unité" },
+      },
+      {
+        path: "demandes-en-attente",
+        name: "directeurUniteDemandesEnAttente",
+        component: DemandesEnAttenteView,
+        meta: { title: "Demandes en attente - Directeur d'Unité" },
+      },
+      {
+        path: "validation-demandes",
+        name: "directeurUniteValidationDemandes",
+        component: ValidationDemandesView,
+        meta: { title: "Validation des demandes - Directeur d'Unité" },
+      },
+      {
+        path: "demande-conges",
+        name: "directeurUniteFormulairePlanification",
+        component: FormulairePlanificationView,
+        meta: { title: "Demande de Congés - Directeur d'Unité" },
+      },
+      {
+        path: "demande-report",
+        name: "directeurUniteFormulaireReport",
+        component: FormulaireReportView,
+        meta: { title: "Demande de Report de Congés - Directeur d'Unité" },
+      },
+      {
+        path: "demande-absence",
+        name: "directeurUniteFormulaireAbsence",
+        component: FormulaireAbsenceView,
+        meta: { title: "Demande d'Absence - Directeur d'Unité" },
+      },
+    ],
+  },
+  {
+    path: "/responsable-rh",
+    component: ResponsableRHDashboard,
+    children: [
+      {
+        path: "",
+        redirect: { name: "responsableRHDashboard" },
+      },
+      {
+        path: "dashboard",
+        name: "responsableRHDashboard",
+        component: DashboardHomeView,
+        meta: { title: "Tableau de bord - Responsable RH" },
+      },
+      {
+        path: "gestion-demandes",
+        name: "responsableRHGestionDemandes",
+        component: GestionDemandesView,
+        meta: { title: "Gestion des Demandes - Responsable RH" },
+      },
+      {
+        path: "etat-demandes",
+        name: "responsableRHEtatDemandes",
+        component: EtatDemandesView,
+        meta: { title: "État des demandes - Responsable RH" },
+      },
+      {
+        path: "solde",
+        name: "responsableRHSoldeConges",
+        component: SoldeView,
+        meta: { title: "Solde de congés - Responsable RH" },
+      },
+      {
+        path: "historique",
+        name: "responsableRHHistoriqueConges",
+        component: HistoriqueView,
+        meta: { title: "Historique des congés - Responsable RH" },
+      },
+      {
+        path: "demandes-en-attente",
+        name: "responsableRHDemandesEnAttente",
+        component: DemandesEnAttenteView,
+        meta: { title: "Demandes en attente - Responsable RH" },
+      },
+      {
+        path: "validation-demandes",
+        name: "responsableRHValidationDemandes",
+        component: ValidationDemandesView,
+        meta: { title: "Validation des demandes - Responsable RH" },
+      },
+      {
+        path: "demande-conges",
+        name: "responsableRHFormulairePlanification",
+        component: FormulairePlanificationView,
+        meta: { title: "Demande de Congés - Responsable RH" },
+      },
+      {
+        path: "demande-report",
+        name: "responsableRHFormulaireReport",
+        component: FormulaireReportView,
+        meta: { title: "Demande de Report de Congés - Responsable RH" },
+      },
+      {
+        path: "demande-absence",
+        name: "responsableRHFormulaireAbsence",
+        component: FormulaireAbsenceView,
+        meta: { title: "Demande d'Absence - Responsable RH" },
+      },
+    ],
+  },
+  {
+    path: "/directeur-rh",
+    component: DirecteurRHDashboard,
+    children: [
+      {
+        path: "",
+        redirect: { name: "directeurRHDashboard" },
+      },
+      {
+        path: "dashboard",
+        name: "directeurRHDashboard",
+        component: DashboardHomeView,
+        meta: { title: "Tableau de bord - Directeur RH" },
+      },
+      {
+        path: "gestion-demandes",
+        name: "directeurRHGestionDemandes",
+        component: GestionDemandesView,
+        meta: { title: "Gestion des Demandes - Directeur RH" },
+      },
+      {
+        path: "etat-demandes",
+        name: "directeurRHEtatDemandes",
+        component: EtatDemandesView,
+        meta: { title: "État des demandes - Directeur RH" },
+      },
+      {
+        path: "solde",
+        name: "directeurRHSoldeConges",
+        component: SoldeView,
+        meta: { title: "Solde de congés - Directeur RH" },
+      },
+      {
+        path: "historique",
+        name: "directeurRHHistoriqueConges",
+        component: HistoriqueView,
+        meta: { title: "Historique des congés - Directeur RH" },
+      },
+      {
+        path: "demandes-en-attente",
+        name: "directeurRHDemandesEnAttente",
+        component: DemandesEnAttenteView,
+        meta: { title: "Demandes en attente - Directeur RH" },
+      },
+      {
+        path: "validation-demandes",
+        name: "directeurRHValidationDemandes",
+        component: ValidationDemandesView,
+        meta: { title: "Validation des demandes - Directeur RH" },
+      },
+      {
+        path: "documents-administratifs",
+        name: "directeurRHDocumentsAdministratifs",
+        component: DocumentsAdministratifsView,
+        meta: { title: "Documents Administratifs" },
+      },
+      {
+        path: "demande-conges",
+        name: "directeurRHFormulairePlanification",
+        component: FormulairePlanificationView,
+        meta: { title: "Demande de Congés - Directeur RH" },
+      },
+      {
+        path: "demande-report",
+        name: "directeurRHFormulaireReport",
+        component: FormulaireReportView,
+        meta: { title: "Demande de Report de Congés - Directeur RH" },
+      },
+      {
+        path: "demande-absence",
+        name: "directeurRHFormulaireAbsence",
+        component: FormulaireAbsenceView,
+        meta: { title: "Demande d'Absence - Directeur RH" },
       },
     ],
   },
@@ -160,31 +378,9 @@ const router = createRouter({
   routes,
 });
 
+// Temporairement désactivé pour le développement frontend
 router.beforeEach((to, from, next) => {
-  // Temporairement désactivé pour le développement frontend
   next();
-
-  // La logique d'authentification sera réactivée plus tard
-  /*
-  const isAuthenticated = localStorage.getItem("user") !== null;
-
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!isAuthenticated) {
-      next({
-        path: "/",
-        query: { redirect: to.fullPath },
-      });
-    } else {
-      next();
-    }
-  } else {
-    if (isAuthenticated && to.path === "/") {
-      next("/employe/dashboard");
-    } else {
-      next();
-    }
-  }
-  */
 });
 
 // Mise à jour du titre de la page

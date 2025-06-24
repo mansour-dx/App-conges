@@ -65,38 +65,48 @@
 export default {
   name: "GestionDemandesView",
   computed: {
-    isSuperieurDashboard() {
-      return this.$route.path.startsWith('/superieur');
+    rolePrefix() {
+      const path = this.$route.path;
+      if (path.startsWith('/superieur')) return 'superieur';
+      if (path.startsWith('/directeur-unite')) return 'directeurUnite';
+      if (path.startsWith('/responsable-rh')) return 'responsableRH';
+      if (path.startsWith('/directeur-rh')) return 'directeurRH';
+      return '';
     }
   },
   methods: {
     navigateToComponent(type) {
-      if (this.isSuperieurDashboard) {
-        // Dans le dashboard supérieur, on utilise aussi la navigation
-        switch (type) {
-          case "planification":
-            this.$router.push({ name: "superieurFormulairePlanification" });
-            break;
-          case "report":
-            this.$router.push({ name: "superieurFormulaireReport" });
-            break;
-          case "absence":
-            this.$router.push({ name: "superieurFormulaireAbsence" });
-            break;
-        }
-      } else {
-        // Dans le dashboard employé, on utilise la navigation
-        switch (type) {
-          case "planification":
-            this.$router.push({ name: "formulairePlanification" });
-            break;
-          case "report":
-            this.$router.push({ name: "formulaireReport" });
-            break;
-          case "absence":
-            this.$router.push({ name: "formulaireAbsence" });
-            break;
-        }
+      const currentPath = this.$route.path;
+      let prefix = '';
+      
+      // Déterminer le préfixe de route en fonction du chemin actuel
+      if (currentPath.includes('/employe')) prefix = '/employe';
+      else if (currentPath.includes('/superieur')) prefix = '/superieur';
+      else if (currentPath.includes('/directeur-unite')) prefix = '/directeur-unite';
+      else if (currentPath.includes('/responsable-rh')) prefix = '/responsable-rh';
+      else if (currentPath.includes('/directeur-rh')) prefix = '/directeur-rh';
+      
+      // Construire le chemin de destination
+      let path = '';
+      switch (type) {
+        case "planification":
+          path = `${prefix}/demande-conges`;
+          break;
+        case "report":
+          path = `${prefix}/demande-report`;
+          break;
+        case "absence":
+          path = `${prefix}/demande-absence`;
+          break;
+      }
+      
+      // Naviguer vers la nouvelle route
+      if (path) {
+        this.$router.push(path).catch(err => {
+          if (err.name !== 'NavigationDuplicated') {
+            throw err;
+          }
+        });
       }
     }
   }

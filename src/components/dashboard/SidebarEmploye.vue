@@ -103,71 +103,16 @@ export default {
 };
 </script>
 
-<style scoped>
-.sidebar {
-  width: 250px;
-  height: 100vh;
-  background-color: var(--primary-color);
-  backdrop-filter: blur(10px);
-  color: white;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 100;
-  box-shadow: 4px 0 25px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
+<style>
+@import '../../assets/styles/sidebar.css';
 
-.sidebar.is-open {
-  transform: translateX(0%);
-}
-
-.sidebar:not(.is-open) {
-  transform: translateX(-250px);
-}
-
-.user-profile-section {
-  background-color: var(--secondary-color);
-  padding: 20px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 0;
-  flex-shrink: 0;
-  text-align: center;
-}
-
-.logo-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
-  padding: 0 20px;
-}
-
-.senelec-logo {
-  width: 100px;
-  height: auto;
-  object-fit: contain;
-  transition: all 0.3s ease;
-}
-
-.senelec-logo:hover {
-  transform: scale(1.05);
-  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
-}
-
+/* Styles spécifiques au composant */
 .user-info {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 0 25px;
   transition: transform 0.3s ease;
-}
-
-.user-info:hover {
-  transform: translateX(0);
 }
 
 .user-details {
@@ -187,12 +132,12 @@ export default {
 .user-function {
   font-size: 12px;
   color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 2px;
 }
 
 .user-role-container {
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
 .user-role {
@@ -231,114 +176,65 @@ export default {
 }
 
 .sidebar-nav {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 15px 15px;
+  padding: 20px 0;
+  flex-grow: 1;
+  overflow-y: auto;
 }
 
 .nav-item {
   display: flex;
-  align-items: center;
-  padding: 12px 30px;
-  border-radius: 12px;
-  color: rgba(255, 255, 255, 0.9);
+  align-items: flex-start;
+  padding: 12px 20px;
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
-  margin-bottom: 8px;
   transition: all 0.3s ease;
   position: relative;
-  overflow: hidden;
+  margin: 4px 8px;
+  border-radius: 8px;
+  min-height: 48px;
 }
 
 .nav-item i {
-  color: #261555;
-  margin-right: 15px;
-  font-size: 24px;
-  transition: color 0.3s ease;
-}
-
-.nav-item:hover i,
-.nav-item.active i {
-  color: white;
+  width: 24px;
+  margin-right: 12px;
+  font-size: 18px;
+  margin-top: 2px;
+  flex-shrink: 0;
 }
 
 .nav-item span {
-  font-size: 16px;
-  font-weight: 500;
+  flex: 1;
+  line-height: 1.4;
+  font-size: 14px;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
-.nav-item::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateX(-100%);
-  transition: transform 0.3s ease;
-  z-index: -1;
-}
-
-.nav-item:hover::before {
-  transform: translateX(0);
-  background: #261555;
+.nav-item:hover {
+  color: white;
+  background-color: rgba(38, 21, 85, 0.8); /* Couleur mauve SENELEC */
 }
 
 .nav-item.active {
-  background: rgba(0, 138, 155, 0.25);
   color: white;
-}
-
-@media (max-width: 1024px) {
-  .sidebar {
-    width: 200px;
-  }
-
-  .nav-item {
-    padding: 10px 15px;
-  }
-}
-
-@media (max-width: 768px) {
-  .sidebar {
-    transform: translateX(-100%);
-  }
-
-  .sidebar.is-open {
-    transform: translateX(0%);
-  }
-}
-
-.logout-btn-employe {
-  width: 100%;
-  padding: 10px 0;
-  background-color: #008a9b;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  background-color: #261555; /* Couleur mauve SENELEC */
   font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.logout-btn-employe:hover {
-  background-color: #005f6b;
 }
 
-.sidebar-hamburger {
+.nav-item.active::before {
+  content: '';
   position: absolute;
-  top: 16px;
-  right: 16px;
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 26px;
-  cursor: pointer;
-  z-index: 110;
-  transition: color 0.2s;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: white;
+  border-radius: 0 4px 4px 0;
 }
-.sidebar-hamburger:hover {
-  color: #008a9b;
+
+/* Ajustement pour les icônes quand le texte est sur deux lignes */
+.nav-item.active i,
+.nav-item:hover i {
+  color: white;
 }
 </style>

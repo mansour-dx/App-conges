@@ -15,8 +15,8 @@
             <i class="fas fa-calendar-check"></i>
           </div>
           <div class="stat-content">
-            <h3>Congés Restants</h3>
-            <p class="stat-value">{{ stats.congesRestants }} jours</p>
+            <h3>{{ isDirecteurRH ? 'Demandes à Valider' : 'Congés Restants' }}</h3>
+            <p class="stat-value">{{ isDirecteurRH ? stats.demandesAValider : stats.congesRestants }} {{ isDirecteurRH ? '' : 'jours' }}</p>
           </div>
         </div>
 
@@ -25,8 +25,8 @@
             <i class="fas fa-clock"></i>
           </div>
           <div class="stat-content">
-            <h3>Demandes en Cours</h3>
-            <p class="stat-value">{{ stats.demandesEnCours }}</p>
+            <h3>{{ isDirecteurRH ? 'Documents à Générer' : 'Demandes en Cours' }}</h3>
+            <p class="stat-value">{{ isDirecteurRH ? stats.documentsAGenerer : stats.demandesEnCours }}</p>
           </div>
         </div>
 
@@ -35,8 +35,8 @@
             <i class="fas fa-check-circle"></i>
           </div>
           <div class="stat-content">
-            <h3>Demandes Approuvées</h3>
-            <p class="stat-value">{{ stats.demandesApprouvees }}</p>
+            <h3>{{ isDirecteurRH ? 'Documents Générés' : 'Demandes Approuvées' }}</h3>
+            <p class="stat-value">{{ isDirecteurRH ? stats.documentsGeneres : stats.demandesApprouvees }}</p>
           </div>
         </div>
       </div>
@@ -99,6 +99,26 @@
           </div>
         </router-link>
 
+        <router-link :to="`${routePrefix}/validation-demandes`" class="action-card" v-if="isValidationRole">
+          <div class="action-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="action-content">
+            <h3>Validation</h3>
+            <p>Valider les demandes</p>
+          </div>
+        </router-link>
+
+        <router-link :to="`${routePrefix}/documents-administratifs`" class="action-card" v-if="isDirecteurRH">
+          <div class="action-icon">
+            <i class="fas fa-file-contract"></i>
+          </div>
+          <div class="action-content">
+            <h3>Documents Administratifs</h3>
+            <p>Gérer les documents</p>
+          </div>
+        </router-link>
+
         <router-link :to="`${routePrefix}/historique`" class="action-card">
           <div class="action-icon">
             <i class="fas fa-history"></i>
@@ -135,22 +155,46 @@
 
 <script>
 import { useCongesStore } from "@/stores/conges";
+import { useDemandesStore } from "@/stores/demandes";
 
 export default {
   name: "DashboardHomeView",
   setup() {
     const congesStore = useCongesStore();
-    return { congesStore };
+    const demandesStore = useDemandesStore();
+    return { congesStore, demandesStore };
   },
   computed: {
     stats() {
+      if (this.isDirecteurRH) {
+        return {
+          demandesAValider: this.demandesStore.demandesEnAttenteDRH.length,
+          documentsAGenerer: this.demandesStore.demandesValideesDRH.length,
+          documentsGeneres: this.demandesStore.demandesValideesDRH.filter(d => d.documentGenere).length,
+        };
+      }
       return this.congesStore.stats;
     },
     prochainsConges() {
       return this.congesStore.prochainsConges;
     },
     routePrefix() {
-      return this.$route.path.startsWith('/superieur') ? '/superieur' : '/employe';
+      const path = this.$route.path;
+      if (path.startsWith('/superieur')) return '/superieur';
+      if (path.startsWith('/directeur-unite')) return '/directeur-unite';
+      if (path.startsWith('/responsable-rh')) return '/responsable-rh';
+      if (path.startsWith('/directeur-rh')) return '/directeur-rh';
+      return '/employe';
+    },
+    isValidationRole() {
+      const path = this.$route.path;
+      return path.startsWith('/superieur') || 
+             path.startsWith('/directeur-unite') || 
+             path.startsWith('/responsable-rh') ||
+             path.startsWith('/directeur-rh');
+    },
+    isDirecteurRH() {
+      return this.$route.path.startsWith('/directeur-rh');
     }
   },
   methods: {
@@ -164,20 +208,16 @@ export default {
         "Autres congés légaux": "badge-autres_legaux",
         "Congés Annuels": "badge-annuel",
         "Congés Maladie": "badge-maladie",
-        Récupération: "badge-recup",
       };
       return classes[type] || "badge-default";
     },
-    getStatusClass(statut) {
+    getStatusClass(status) {
       const classes = {
         "En attente": "status-pending",
-        en_attente: "status-pending",
-        Approuvé: "status-approved",
-        approuve: "status-approved",
-        Refusé: "status-rejected",
-        rejete: "status-rejected",
+        "Approuvé": "status-approved",
+        "Rejeté": "status-rejected",
       };
-      return classes[statut] || "status-default";
+      return classes[status] || "status-default";
     },
   },
 };
@@ -376,11 +416,6 @@ export default {
 .badge-maladie {
   background: #fee2e2;
   color: #991b1b;
-}
-
-.badge-recup {
-  background: #dcfce7;
-  color: #166534;
 }
 
 .status {
