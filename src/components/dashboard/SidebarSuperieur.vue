@@ -27,6 +27,7 @@
       </div>
     </div>
     <nav class="sidebar-nav">
+      <!-- Section Tableau de bord -->
       <router-link
         :to="{ name: `${rolePrefix}Dashboard` }"
         class="nav-item"
@@ -35,65 +36,77 @@
         <i class="fas fa-tachometer-alt"></i>
         <span>Dashboard</span>
       </router-link>
-      <router-link
-        :to="{ name: `${rolePrefix}GestionDemandes` }"
-        class="nav-item"
-        active-class="active"
-      >
-        <i class="fas fa-tasks"></i>
-        <span>Gestion des Demandes</span>
-      </router-link>
-      <router-link
-        v-if="role !== 'Employé'"
-        :to="{ name: `${rolePrefix}DemandesEnAttente` }"
-        class="nav-item"
-        active-class="active"
-      >
-        <i class="fas fa-list"></i>
-        <span>Liste des demandes</span>
-      </router-link>
-      <router-link
-        v-if="role !== 'Employé'"
-        :to="{ name: `${rolePrefix}ValidationDemandes` }"
-        class="nav-item"
-        active-class="active"
-      >
-        <i class="fas fa-check-circle"></i>
-        <span>Validation des demandes</span>
-      </router-link>
-      <router-link
-        :to="{ name: `${rolePrefix}EtatDemandes` }"
-        class="nav-item"
-        active-class="active"
-      >
-        <i class="fas fa-list-check"></i>
-        <span>État des demandes</span>
-      </router-link>
-      <router-link
-        :to="{ name: `${rolePrefix}SoldeConges` }"
-        class="nav-item"
-        active-class="active"
-      >
-        <i class="fas fa-wallet"></i>
-        <span>Solde de congés</span>
-      </router-link>
-      <router-link
-        :to="{ name: `${rolePrefix}HistoriqueConges` }"
-        class="nav-item"
-        active-class="active"
-      >
-        <i class="fas fa-history"></i>
-        <span>Historique</span>
-      </router-link>
-      <router-link
-        v-if="role === 'Directeur RH'"
-        :to="{ name: 'directeurRHDocumentsAdministratifs' }"
-        class="nav-item"
-        active-class="active"
-      >
-        <i class="fas fa-file-contract"></i>
-        <span>Documents Administratifs</span>
-      </router-link>
+
+      <!-- Section Mon Espace -->
+      <div class="nav-section">
+        <div class="section-title">Mon Espace</div>
+        <router-link
+          :to="{ name: `${rolePrefix}GestionDemandes` }"
+          class="nav-item"
+          active-class="active"
+        >
+          <i class="fas fa-tasks"></i>
+          <span>Gestion des Demandes</span>
+        </router-link>
+        <router-link
+          :to="{ name: `${rolePrefix}EtatDemandes` }"
+          class="nav-item"
+          active-class="active"
+        >
+          <i class="fas fa-list-check"></i>
+          <span>État des demandes</span>
+        </router-link>
+        <router-link
+          :to="{ name: `${rolePrefix}SoldeConges` }"
+          class="nav-item"
+          active-class="active"
+        >
+          <i class="fas fa-wallet"></i>
+          <span>Solde de congés</span>
+        </router-link>
+        <router-link
+          :to="{ name: `${rolePrefix}HistoriqueConges` }"
+          class="nav-item"
+          active-class="active"
+        >
+          <i class="fas fa-history"></i>
+          <span>Historique</span>
+        </router-link>
+      </div>
+
+      <!-- Section Validation (uniquement pour les rôles concernés) -->
+      <div v-if="role !== 'Employé'" class="nav-section">
+        <div class="section-title">Validation</div>
+        <router-link
+          :to="{ name: `${rolePrefix}DemandesEnAttente` }"
+          class="nav-item"
+          active-class="active"
+        >
+          <i class="fas fa-list"></i>
+          <span>Demandes en attente</span>
+        </router-link>
+        <router-link
+          :to="{ name: `${rolePrefix}ValidationDemandes` }"
+          class="nav-item"
+          active-class="active"
+        >
+          <i class="fas fa-check-circle"></i>
+          <span>Validation</span>
+        </router-link>
+      </div>
+
+      <!-- Section Administration (uniquement pour le Directeur RH) -->
+      <div v-if="role === 'Directeur RH'" class="nav-section">
+        <div class="section-title">Administration</div>
+        <router-link
+          :to="{ name: 'directeurRHDocumentsAdministratifs' }"
+          class="nav-item"
+          active-class="active"
+        >
+          <i class="fas fa-file-contract"></i>
+          <span>Documents</span>
+        </router-link>
+      </div>
     </nav>
     <div style="padding: 16px; margin-top: auto">
       <button class="logout-btn-employe" @click="logout">Déconnexion</button>
@@ -284,31 +297,49 @@ export default {
   overflow-y: auto;
 }
 
+.nav-section {
+  margin: 8px 0;
+  padding-top: 8px;
+}
+
+.nav-section:not(:first-child) {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.section-title {
+  padding: 0 20px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
 .nav-item {
   display: flex;
-  align-items: flex-start;
-  padding: 12px 20px;
+  align-items: center;
+  padding: 10px 20px;
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   transition: all 0.3s ease;
   position: relative;
-  margin: 4px 8px;
+  margin: 2px 8px;
   border-radius: 8px;
-  min-height: 48px;
+  min-height: 40px;
 }
 
 .nav-item i {
-  width: 24px;
+  width: 20px;
   margin-right: 12px;
-  font-size: 18px;
-  margin-top: 2px;
+  font-size: 16px;
   flex-shrink: 0;
 }
 
 .nav-item span {
   flex: 1;
   line-height: 1.4;
-  font-size: 14px;
+  font-size: 13px;
   white-space: normal;
   word-wrap: break-word;
 }
@@ -359,28 +390,11 @@ export default {
 .badge {
   background-color: #ff4757;
   color: white;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 12px;
+  padding: 2px 8px;
   font-size: 11px;
   font-weight: 600;
-  margin-left: auto;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
+  margin-left: 8px;
 }
 
 @media (max-width: 768px) {

@@ -28,6 +28,13 @@
   padding: 20px 0;
   flex-grow: 1;
   overflow-y: auto;
+  scrollbar-width: none; /* Pour Firefox */
+  -ms-overflow-style: none; /* Pour Internet Explorer et Edge */
+}
+
+/* Pour Chrome, Safari et Opera */
+.sidebar-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .nav-item {
