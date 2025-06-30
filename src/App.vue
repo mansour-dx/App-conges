@@ -48,11 +48,15 @@ h3 {
   font-size: 1.2rem;
   font-weight: 600;
 }
-h4, .card-title {
+h4,
+.card-title {
   font-size: 1rem;
   font-weight: 500;
 }
-.small, .label, .card-content p, .sidebar .user-function {
+.small,
+.label,
+.card-content p,
+.sidebar .user-function {
   font-size: 0.9rem;
 }
 

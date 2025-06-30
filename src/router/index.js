@@ -16,6 +16,14 @@ import DocumentsAdministratifsView from "../views/dashboard/DocumentsAdministrat
 import FormulairePlanificationView from "../views/dashboard/FormulairePlanificationView.vue";
 import FormulaireReportView from "../views/dashboard/FormulaireReportView.vue";
 import FormulaireAbsenceView from "../views/dashboard/FormulaireAbsenceView.vue";
+import AdminDashboard from "../views/AdminDashboard.vue";
+import AdminHomeView from "../views/admin/AdminHomeView.vue";
+import UserManagementView from "../views/admin/UserManagementView.vue";
+import DepartmentManagementView from "../views/admin/DepartmentManagementView.vue";
+import LogsView from "../views/admin/LogsView.vue";
+import SettingsView from "../views/admin/SettingsView.vue";
+import LeavePlanningView from "../views/admin/LeavePlanningView.vue";
+import DemandesHistoryView from "../views/admin/DemandesHistoryView.vue";
 
 const routes = [
   {
@@ -364,6 +372,58 @@ const routes = [
         name: "directeurRHFormulaireAbsence",
         component: FormulaireAbsenceView,
         meta: { title: "Demande d'Absence - Directeur RH" },
+      },
+    ],
+  },
+  {
+    path: "/admin",
+    component: AdminDashboard,
+    children: [
+      {
+        path: "",
+        redirect: { name: "adminDashboard" },
+      },
+      {
+        path: "dashboard",
+        name: "adminDashboard",
+        component: AdminHomeView,
+        meta: { title: "Tableau de Bord Admin" },
+      },
+      {
+        path: "users",
+        name: "userManagement",
+        component: UserManagementView,
+        meta: { title: "Gestion des Utilisateurs" },
+      },
+      {
+        path: "departments",
+        name: "departmentManagement",
+        component: DepartmentManagementView,
+        meta: { title: "Gestion des Départements" },
+      },
+      {
+        path: "planning",
+        name: "leavePlanning",
+        component: LeavePlanningView,
+        meta: { title: "Planification des Congés" },
+      },
+      {
+        path: "history",
+        name: "demandesHistory",
+        component: DemandesHistoryView,
+        meta: { title: "Historique des Demandes" },
+      },
+      {
+        path: "logs",
+        name: "logsView",
+        component: LogsView,
+        meta: { title: "Journaux d'Activité" },
+      },
+      {
+        path: "settings",
+        name: "settingsView",
+        component: SettingsView,
+        meta: { title: "Paramètres" },
       },
     ],
   },

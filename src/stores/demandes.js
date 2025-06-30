@@ -15,6 +15,7 @@ export const useDemandesStore = defineStore("demandes", {
         duree: 5,
         motif: "Vacances familiales",
         status: "en_attente",
+        niveauApprobation: "Supérieur Hiérarchique",
         dateDemande: "2024-03-20",
         commentaireValidation: null,
         dateValidation: null,
@@ -32,6 +33,7 @@ export const useDemandesStore = defineStore("demandes", {
         duree: 3,
         motif: "Consultation médicale",
         status: "approuvee",
+        niveauApprobation: "Directeur RH",
         dateDemande: "2024-03-18",
         dateValidation: "2024-03-19",
         commentaireValidation: "Demande justifiée avec certificat médical",
@@ -49,6 +51,7 @@ export const useDemandesStore = defineStore("demandes", {
         duree: 6,
         motif: "Report pour raisons personnelles",
         status: "rejetee",
+        niveauApprobation: "Supérieur Hiérarchique",
         dateDemande: "2024-03-22",
         dateValidation: "2024-03-23",
         commentaireValidation: "Report non justifié, période de forte activité",
@@ -66,6 +69,7 @@ export const useDemandesStore = defineStore("demandes", {
         duree: 5,
         motif: "Vacances d'été",
         status: "en_attente",
+        niveauApprobation: "Directeur Unité",
         dateDemande: "2024-03-25",
         commentaireValidation: null,
         dateValidation: null,
@@ -83,6 +87,7 @@ export const useDemandesStore = defineStore("demandes", {
         duree: 3,
         motif: "Grippe",
         status: "approuvee",
+        niveauApprobation: "Responsable RH",
         dateDemande: "2024-03-26",
         dateValidation: "2024-03-26",
         commentaireValidation: "Certificat médical fourni",
@@ -105,13 +110,18 @@ export const useDemandesStore = defineStore("demandes", {
     // Demandes validées par le Directeur RH
     demandesValideesDRH: (state) =>
       state.demandes.filter(
-        (d) => d.status === "approuvee" && d.validePar && d.validePar.includes("Directeur RH")
+        (d) =>
+          d.status === "approuvee" &&
+          d.validePar &&
+          d.validePar.includes("Directeur RH")
       ),
 
     // Demandes en attente de validation DRH
     demandesEnAttenteDRH: (state) =>
       state.demandes.filter(
-        (d) => d.status === "en_attente" && (!d.validePar || !d.validePar.includes("Directeur RH"))
+        (d) =>
+          d.status === "en_attente" &&
+          (!d.validePar || !d.validePar.includes("Directeur RH"))
       ),
 
     // Statistiques
@@ -196,6 +206,7 @@ export const useDemandesStore = defineStore("demandes", {
         ...demande,
         id: Date.now(),
         status: "en_attente",
+        niveauApprobation: "Supérieur Hiérarchique",
         dateDemande: new Date().toISOString().split("T")[0],
         commentaireValidation: null,
         dateValidation: null,
@@ -241,10 +252,21 @@ export const useDemandesStore = defineStore("demandes", {
     },
 
     // Valider une demande
-    validerDemande(demandeId, action, commentaire, validePar) {
+    validerDemande(demandeId, action, commentaire, validePar, niveauSuivant) {
       const demande = this.demandes.find((d) => d.id === demandeId);
       if (demande) {
-        demande.status = action === "approve" ? "approuvee" : "rejetee";
+        if (action === "approve") {
+          if (niveauSuivant) {
+            demande.niveauApprobation = niveauSuivant;
+          } else {
+            demande.status = "approuvee";
+            demande.niveauApprobation = "Terminé";
+          }
+        } else {
+          demande.status = "rejetee";
+          demande.niveauApprobation = "Rejeté";
+        }
+
         demande.dateValidation = new Date().toISOString().split("T")[0];
         demande.commentaireValidation = commentaire;
         demande.validePar = validePar;
@@ -290,7 +312,11 @@ export const useDemandesStore = defineStore("demandes", {
     // Obtenir les statistiques mensuelles
     getStatistiquesMensuelles() {
       const maintenant = new Date();
-      const debutMois = new Date(maintenant.getFullYear(), maintenant.getMonth(), 1);
+      const debutMois = new Date(
+        maintenant.getFullYear(),
+        maintenant.getMonth(),
+        1
+      );
       const demandesMois = this.demandes.filter(
         (d) => new Date(d.dateDemande) >= debutMois
       );
