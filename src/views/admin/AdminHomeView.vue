@@ -1,16 +1,5 @@
 <template>
   <v-container fluid class="admin-home-view pa-6">
-    <v-row>
-      <v-col cols="12">
-        <h1 class="text-h4 font-weight-bold text-grey-darken-3">
-          Tableau de bord Administrateur
-        </h1>
-        <p class="text-subtitle-1 text-grey-darken-1">
-          Vue d'ensemble du système et des activités.
-        </p>
-      </v-col>
-    </v-row>
-
     <!-- Cartes de Statistiques (KPIs) -->
     <v-row>
       <v-col v-for="kpi in kpis" :key="kpi.title" cols="12" sm="6" md="3">

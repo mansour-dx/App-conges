@@ -1,11 +1,5 @@
 <template>
   <div class="solde-container">
-    <!-- En-tête simple -->
-    <div class="solde-header">
-      <h1>Mon solde de congés</h1>
-      <p>Année {{ anneeActuelle }}</p>
-    </div>
-
     <!-- Cartes des congés -->
     <div class="conges-grid">
       <!-- Congé annuel -->
@@ -210,29 +204,6 @@ export default {
   font-family: "Inter", sans-serif;
 }
 
-/* En-tête */
-.solde-header {
-  text-align: center;
-  margin-bottom: 3rem;
-  padding: 2rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  border-radius: 16px;
-  border-left: 4px solid #008a9b;
-}
-
-.solde-header h1 {
-  color: #261555;
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin: 0 0 0.5rem 0;
-}
-
-.solde-header p {
-  color: #64748b;
-  font-size: 1.1rem;
-  margin: 0;
-}
-
 /* Grille des congés */
 .conges-grid {
   display: grid;
@@ -430,15 +401,6 @@ export default {
 @media (max-width: 768px) {
   .solde-container {
     padding: 1rem;
-  }
-
-  .solde-header {
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-  }
-
-  .solde-header h1 {
-    font-size: 2rem;
   }
 
   .conges-grid,

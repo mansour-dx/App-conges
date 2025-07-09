@@ -1,10 +1,5 @@
 <template>
   <div class="demandes-en-attente">
-    <div class="page-header">
-      <h1>Liste des Demandes</h1>
-      <p>Consultez et gérez les demandes de congés de vos collaborateurs</p>
-    </div>
-
     <div class="filters-section">
       <div class="search-box">
         <i class="fas fa-search"></i>

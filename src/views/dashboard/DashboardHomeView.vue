@@ -1,11 +1,5 @@
 <template>
   <div class="dashboard-home">
-    <!-- En-tête du dashboard -->
-    <div class="dashboard-header">
-      <h1>Tableau de Bord</h1>
-      <p>Bienvenue sur votre espace de gestion des congés</p>
-    </div>
-
     <!-- Statistiques principales -->
     <div class="stats-section">
       <h2>Vue d'ensemble</h2>

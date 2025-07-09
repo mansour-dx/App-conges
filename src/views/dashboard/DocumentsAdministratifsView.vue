@@ -1,11 +1,5 @@
 <template>
   <div class="documents-administratifs">
-    <!-- En-tête avec le style du dashboard -->
-    <div class="dashboard-header">
-      <h1>Documents Administratifs</h1>
-      <p>Génération des documents officiels pour les demandes approuvées</p>
-    </div>
-
     <!-- Section des filtres modernisée -->
     <div class="filters-container">
       <div class="search-bar">

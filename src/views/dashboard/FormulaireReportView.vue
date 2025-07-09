@@ -6,9 +6,7 @@
           <i class="fas fa-arrow-left"></i>
           Retour
         </button>
-        <h1>Report de Congés</h1>
       </div>
-      <p class="header-description">Demandez le report de vos jours de congés non utilisés</p>
     </div>
 
     <div class="form-container">
@@ -76,18 +74,6 @@ export default {
   font-size: 0.9rem;
 }
 
-.page-header h1 {
-  color: #261555;
-  font-size: 2rem;
-  margin: 0;
-}
-
-.header-description {
-  color: #64748b;
-  margin: 0.5rem 0 0 0;
-  font-size: 1.1rem;
-}
-
 .form-container {
   background: white;
   border-radius: 16px;
@@ -103,10 +89,6 @@ export default {
 
   .page-header {
     padding: 1.5rem;
-  }
-
-  .page-header h1 {
-    font-size: 1.5rem;
   }
 
   .form-container {

@@ -1,10 +1,5 @@
 <template>
   <div class="validation-demandes">
-    <div class="page-header">
-      <h1>Validation des Demandes</h1>
-      <p>Approuvez ou rejetez les demandes de vos collaborateurs</p>
-    </div>
-
     <div class="validation-tabs">
       <button
         v-for="tab in tabs"

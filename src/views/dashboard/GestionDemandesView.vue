@@ -3,11 +3,6 @@
     <div class="content-wrapper">
       <!-- Section des cartes -->
       <div class="cards-section">
-        <div class="page-header">
-          <h1>Gestion des Demandes</h1>
-          <p>Sélectionnez le type de demande que vous souhaitez effectuer</p>
-        </div>
-
         <div class="cards-grid">
           <!-- Carte pour les congés annuels -->
           <div
