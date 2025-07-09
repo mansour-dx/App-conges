@@ -2,9 +2,9 @@
   <v-card height="64" flat class="dashboard-toolbar-card">
     <v-toolbar class="text-white dashboard-toolbar" :style="toolbarStyle">
       <v-btn
-        v-if="!sidebarOpen"
         icon="mdi-menu"
         @click="$emit('toggle-sidebar')"
+        class="hamburger-btn"
       ></v-btn>
       <v-toolbar-title class="text-center">{{ pageTitle }}</v-toolbar-title>
       <div class="toolbar-actions">
@@ -118,6 +118,13 @@ export default {
 }
 .logout-btn-toolbar {
   color: #fff;
+}
+.hamburger-btn {
+  color: #fff;
+  margin-right: 8px;
+}
+.hamburger-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 .v-toolbar-title {
   flex: 1;

@@ -1,12 +1,5 @@
 <template>
   <div class="sidebar" :class="{ 'is-open': isOpen }">
-    <button
-      v-if="isOpen"
-      @click="$emit('toggle-sidebar')"
-      class="sidebar-hamburger"
-    >
-      <i class="fas fa-bars"></i>
-    </button>
     <div class="user-profile-section">
       <div class="logo-container">
         <img
@@ -434,21 +427,5 @@ export default {
 }
 .logout-btn-employe:hover {
   background-color: #005f6b;
-}
-
-.sidebar-hamburger {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 26px;
-  cursor: pointer;
-  z-index: 110;
-  transition: color 0.2s;
-}
-.sidebar-hamburger:hover {
-  color: #008a9b;
 }
 </style>

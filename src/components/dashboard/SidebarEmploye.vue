@@ -1,12 +1,5 @@
 <template>
   <div class="sidebar" :class="{ 'is-open': isOpen }">
-    <button
-      v-if="isOpen"
-      @click="$emit('toggle-sidebar')"
-      class="sidebar-hamburger"
-    >
-      <i class="fas fa-bars"></i>
-    </button>
     <div class="user-profile-section">
       <div class="logo-container">
         <img
