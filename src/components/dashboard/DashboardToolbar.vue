@@ -8,21 +8,73 @@
       ></v-btn>
       <v-toolbar-title class="text-center">{{ pageTitle }}</v-toolbar-title>
       <div class="toolbar-actions">
-        <v-menu offset-y transition="fab-transition">
+        <v-menu offset-y max-width="400">
           <template #activator="{ props }">
             <v-btn icon v-bind="props">
-              <v-badge :content="notificationCount" color="#dc2626" overlap>
+              <v-badge 
+                :content="notificationCount" 
+                color="#dc2626" 
+                overlap
+                :model-value="notificationCount > 0"
+              >
                 <v-icon>mdi-bell</v-icon>
               </v-badge>
             </v-btn>
           </template>
-          <v-list>
-            <v-list-item v-for="(notif, i) in notifications" :key="i">
-              <v-list-item-title>{{ notif.title }}</v-list-item-title>
-              <v-list-item-subtitle>{{ notif.subtitle }}</v-list-item-subtitle>
+          <v-list class="notification-dropdown" max-height="400">
+            <v-list-item class="notification-header">
+              <v-list-item-title class="text-h6">Notifications</v-list-item-title>
+              <template v-slot:append>
+                <v-btn 
+                  size="small" 
+                  variant="text" 
+                  @click="markAllAsRead"
+                  v-if="unreadCount > 0"
+                >
+                  Tout marquer comme lu
+                </v-btn>
+              </template>
             </v-list-item>
-            <v-list-item v-if="notifications.length === 0">
-              <v-list-item-title>Aucune notification</v-list-item-title>
+            <v-divider></v-divider>
+            
+            <div v-if="notifications.length === 0" class="no-notifications">
+              <v-list-item>
+                <div class="text-center py-4">
+                  <v-icon size="48" color="grey-lighten-2">mdi-bell-outline</v-icon>
+                  <p class="text-grey mt-2">Aucune notification</p>
+                </div>
+              </v-list-item>
+            </div>
+            
+            <v-list-item 
+              v-for="notif in notifications.slice(0, 5)" 
+              :key="notif.id"
+              :class="{ 'notification-unread': !notif.read }"
+              @click="markAsRead(notif.id)"
+              class="notification-item"
+            >
+              <template v-slot:prepend>
+                <v-avatar size="32" :color="getNotificationColor(notif.type)">
+                  <v-icon size="16" color="white">{{ getNotificationIcon(notif.type) }}</v-icon>
+                </v-avatar>
+              </template>
+              
+              <v-list-item-title class="text-wrap">{{ notif.title }}</v-list-item-title>
+              <v-list-item-subtitle class="text-wrap">{{ notif.message }}</v-list-item-subtitle>
+              
+              <template v-slot:append>
+                <div class="notification-meta">
+                  <small class="text-grey">{{ formatTime(notif.timestamp) }}</small>
+                  <v-icon v-if="!notif.read" size="8" color="primary" class="ml-2">mdi-circle</v-icon>
+                </div>
+              </template>
+            </v-list-item>
+            
+            <v-divider v-if="notifications.length > 5"></v-divider>
+            <v-list-item v-if="notifications.length > 5" @click="viewAllNotifications">
+              <v-list-item-title class="text-center text-primary">
+                Voir toutes les notifications ({{ notifications.length }})
+              </v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
@@ -35,38 +87,34 @@
 </template>
 
 <script>
+import { useNotificationsStore } from '@/stores/notifications'
+
 export default {
   name: "DashboardToolbar",
+  setup() {
+    const notificationsStore = useNotificationsStore()
+    return { notificationsStore }
+  },
   props: {
     pageTitle: {
       type: String,
       default: "Tableau de bord",
-    },
-    notificationCount: {
-      type: Number,
-      default: 3,
-    },
-    notifications: {
-      type: Array,
-      default: () => [
-        {
-          title: "Nouvelle demande",
-          subtitle: "Une nouvelle demande de congé a été soumise.",
-        },
-        { title: "Validation", subtitle: "Votre demande a été validée." },
-        {
-          title: "Rappel",
-          subtitle: "N'oubliez pas de planifier vos congés annuels.",
-        },
-      ],
     },
     sidebarOpen: {
       type: Boolean,
       default: false,
     },
   },
-  emits: ["toggle-sidebar"],
   computed: {
+    notifications() {
+      return this.notificationsStore.allNotifications
+    },
+    notificationCount() {
+      return this.notificationsStore.unreadCount
+    },
+    unreadCount() {
+      return this.notificationsStore.unreadCount
+    },
     toolbarStyle() {
       let style = {
         background: "linear-gradient(90deg, #008a9b 0%, #261555 100%)",
@@ -83,11 +131,54 @@ export default {
       return style;
     },
   },
+  emits: ["toggle-sidebar"],
   methods: {
     logout() {
       localStorage.removeItem("user");
       this.$router.push("/");
     },
+    markAsRead(id) {
+      this.notificationsStore.markAsRead(id)
+    },
+    markAllAsRead() {
+      this.notificationsStore.markAllAsRead()
+    },
+    getNotificationColor(type) {
+      const colors = {
+        success: 'success',
+        error: 'error',
+        warning: 'warning',
+        info: 'info'
+      }
+      return colors[type] || 'info'
+    },
+    getNotificationIcon(type) {
+      const icons = {
+        success: 'mdi-check-circle',
+        error: 'mdi-alert-circle',
+        warning: 'mdi-alert',
+        info: 'mdi-information'
+      }
+      return icons[type] || 'mdi-information'
+    },
+    formatTime(timestamp) {
+      const now = new Date()
+      const notifTime = new Date(timestamp)
+      const diffInMinutes = Math.floor((now - notifTime) / (1000 * 60))
+      
+      if (diffInMinutes < 1) return 'À l\'instant'
+      if (diffInMinutes < 60) return `${diffInMinutes}m`
+      
+      const diffInHours = Math.floor(diffInMinutes / 60)
+      if (diffInHours < 24) return `${diffInHours}h`
+      
+      const diffInDays = Math.floor(diffInHours / 24)
+      return `${diffInDays}j`
+    },
+    viewAllNotifications() {
+      // TODO: Navigate to notifications page
+      console.log('Voir toutes les notifications')
+    }
   },
 };
 </script>
@@ -118,6 +209,7 @@ export default {
 }
 .logout-btn-toolbar {
   color: #fff;
+  margin-left: 8px;
 }
 .hamburger-btn {
   color: #fff;
@@ -134,6 +226,34 @@ export default {
 }
 body {
   padding-top: 64px;
+}
+.notification-dropdown {
+  max-width: 400px;
+  border-radius: 12px;
+}
+.notification-header {
+  padding: 16px !important;
+  background-color: #f8fafc;
+}
+.notification-item {
+  padding: 12px 16px !important;
+  border-bottom: 1px solid #f1f5f9;
+}
+.notification-item:hover {
+  background-color: #f8fafc;
+}
+.notification-unread {
+  background-color: #f0f9ff;
+  border-left: 3px solid #008a9b;
+}
+.notification-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+.no-notifications {
+  padding: 20px;
 }
 @media (max-width: 768px) {
   .dashboard-toolbar-card {

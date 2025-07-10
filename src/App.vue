@@ -1,12 +1,18 @@
 <template>
   <v-app>
     <router-view />
+    <NotificationSystem />
   </v-app>
 </template>
 
 <script>
+import NotificationSystem from '@/components/ui/NotificationSystem.vue'
+
 export default {
   name: "App",
+  components: {
+    NotificationSystem
+  }
 };
 </script>
 

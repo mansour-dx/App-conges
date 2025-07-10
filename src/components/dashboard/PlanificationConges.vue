@@ -288,6 +288,7 @@
 <script>
 import SignaturePad from "./SignaturePad.vue";
 import { useCongesStore } from "@/stores/conges";
+import { useNotificationsStore } from "@/stores/notifications";
 
 export default {
   name: "PlanificationConges",
@@ -296,7 +297,8 @@ export default {
   },
   setup() {
     const congesStore = useCongesStore();
-    return { congesStore };
+    const notificationsStore = useNotificationsStore();
+    return { congesStore, notificationsStore };
   },
   data() {
     return {
@@ -369,8 +371,23 @@ export default {
       window.print();
     },
     envoyerDemande() {
+      // Validation simple
+      if (!this.formData.prenom || !this.formData.nom) {
+        this.notificationsStore.notifyError('Veuillez remplir tous les champs obligatoires');
+        return;
+      }
+
+      if (!this.formData.annuel && !this.formData.fractionne && !this.formData.legal) {
+        this.notificationsStore.notifyWarning('Veuillez sélectionner au moins un type de congé');
+        return;
+      }
+
       this.demandeEnvoyee = true;
       this.confirmation = true;
+      
+      // Notification de succès
+      this.notificationsStore.notifyDemandeSubmitted(`${this.formData.prenom} ${this.formData.nom}`);
+      
       setTimeout(() => {
         this.confirmation = false;
       }, 3000);

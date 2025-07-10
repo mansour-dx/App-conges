@@ -94,8 +94,14 @@
 </template>
 
 <script>
+import { useNotificationsStore } from '@/stores/notifications'
+
 export default {
   name: "EtatDemandes",
+  setup() {
+    const notificationsStore = useNotificationsStore()
+    return { notificationsStore }
+  },
   data() {
     return {
       filters: {
@@ -190,7 +196,12 @@ export default {
           `Êtes-vous sûr de vouloir annuler cette demande de ${demande.type}?`
         )
       ) {
-        // Logique d'annulation
+        // Simule l'annulation
+        demande.status = 'annule';
+        
+        // Notification d'annulation
+        this.notificationsStore.notifyDemandeCancelled('Votre demande');
+        
         console.log("Demande annulée:", demande.id);
       }
     },

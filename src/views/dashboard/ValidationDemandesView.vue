@@ -228,8 +228,14 @@
 </template>
 
 <script>
+import { useNotificationsStore } from '@/stores/notifications'
+
 export default {
   name: "ValidationDemandesView",
+  setup() {
+    const notificationsStore = useNotificationsStore()
+    return { notificationsStore }
+  },
   data() {
     return {
       activeTab: "en-attente",
@@ -351,12 +357,17 @@ export default {
     },
     validerDemande() {
       if (this.selectedDemande) {
-        this.selectedDemande.status =
-          this.validationAction === "approve" ? "approuvee" : "rejetee";
+        const action = this.validationAction;
+        const demandeur = `${this.selectedDemande.prenom} ${this.selectedDemande.nom}`;
+        
+        this.selectedDemande.status = action === "approve" ? "approuvee" : "rejetee";
         this.selectedDemande.dateValidation = new Date()
           .toISOString()
           .split("T")[0];
         this.selectedDemande.commentaireValidation = this.commentaireValidation;
+
+        // Notification de validation
+        this.notificationsStore.notifyDemandeValidated(action, demandeur);
 
         // Ici on ajouterait l'appel API pour sauvegarder
         console.log("Demande validée:", this.selectedDemande);
